@@ -1,0 +1,8 @@
+/**
+ * Algorithms
+ */
+class Algorithms {
+  constructor() {
+    
+  }
+}

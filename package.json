@@ -1,0 +1,28 @@
+{
+  "name": "trabalho1",
+  "version": "1.0.0",
+  "description": "Testando algoritmos de ordenação",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GuiCavi/trabalho1-paa.git"
+  },
+  "author": "Guilherme Vincenzi Cavichioli",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/GuiCavi/trabalho1-paa/issues"
+  },
+  "homepage": "https://github.com/GuiCavi/trabalho1-paa#readme",
+  "devDependencies": {
+    "browser-sync": "^2.11.2",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^3.1.0",
+    "gulp-jade": "^1.1.0",
+    "gulp-plumber": "^1.1.0",
+    "gulp-sass": "^2.2.0",
+    "gulp-typescript": "^2.12.2"
+  }
+}
