@@ -1,11 +1,100 @@
-import * as Utils from "./sortUtils";
+class Utils {
+  constructor() {
+    console.log("Utils class loaded");
+  }
+  
+  public static swap(a: any, b: any) {    
+    return [b, a];
+  }
+  
+  public static calculate(func: any, arr: number[]) {
+    let start = performance.now();
+    func(arr);
+    let end = performance.now();
+    
+    return end-start;
+  }
+  
+  public static generateHTML(arr: any[], type: string) {
+    switch (type) {
+      case 'ul':
+        let $ul = document.createElement('ul');
+      
+        for (let i = 0; i < arr.length; i++) {
+          let $li = document.createElement('li');
+          
+          $li.textContent = arr[i];
+          $ul.appendChild($li);          
+        }
+        
+        return $ul;
+    
+      default:
+        break;
+    }
+  }
+  
+  public static siftDown(numbers: number[], root: number, bottom: number) {
+    let maxChild = root * 2 + 1;
+    
+    if (maxChild < bottom) {
+      let otherChild = maxChild + 1;
+      maxChild = (numbers[otherChild] > numbers[maxChild]) ? otherChild : maxChild;
+    }
+    else if (maxChild > bottom) return;
+    
+    if (numbers[root] >= numbers[maxChild]) return;
+    
+    [numbers[root], numbers[maxChild]] = this.swap(numbers[root], numbers[maxChild]);
+    
+    this.siftDown(numbers, maxChild, bottom);
+  }
+  
+  public static merge(numbers: number[], begin: number, mid: number, end: number) {    
+    let temp: number[] = [],
+        i = begin, j = mid, k = 0;
+    
+    while (i < mid && j < end) {
+      if (numbers[i] <= numbers[j]) temp[k++] = numbers[i++];
+      else temp[k++] = numbers[j++];
+    }
+    
+    while (i < mid) temp[k++] = numbers[i++];
+    while (j < end) temp[k++] = numbers[j++];
+    
+    for (i = begin; i < end; i++) {
+      numbers[i] = temp[i-begin];
+    }
+    
+    return numbers;
+  }
+  
+  /** Partition method */
+  public static partition(numbers: number[], left: number, right: number) {
+    // let pivot: number = Math.floor(left+right / 2),
+    let pivot: number = left,
+        i = left, j = right;       
+        
+    while (i <= j) {
+      while (numbers[i] < numbers[pivot]) i++;
+      while (numbers[j] > numbers[pivot]) j--;
+      
+      if (i <= j) {
+        [numbers[i], numbers[j]] = this.swap(numbers[i], numbers[j]);
+        
+        i++;
+        j--;
+      }
+    }
+    
+    return i;
+  }
+}
 
 /**
  * Algorithms
  */
 class Sort {
-  utils = new Utils.Utils();
-  
   constructor() {
     console.log("new object of Sort");
   }
@@ -17,7 +106,7 @@ class Sort {
     for (let i = 0; i < numbers.length; i++) {
       for (let j = 0; j < numbers.length-1; j++) {
         if (numbers[j] > numbers[j + 1]) {
-          [numbers[j], numbers[j + 1]] = this.utils.swap(numbers[j], numbers[j + 1]);
+          [numbers[j], numbers[j + 1]] = Utils.swap(numbers[j], numbers[j + 1]);
         }
       }
     }
@@ -26,7 +115,7 @@ class Sort {
   /**
    * Most eficient bubbleSort
    */
-  bubbleSort2(numbers: number[]) {
+  bubbleSort2(numbers: number[]) {    
     let finish = false,
         j = 0;
     
@@ -35,7 +124,7 @@ class Sort {
       
       for (let i = 0; i < numbers.length; i++) {
         if (numbers[i] > numbers[i + 1]) {
-          [numbers[i], numbers[i + 1]] = this.utils.swap(numbers[i], numbers[i + 1]);
+          [numbers[i], numbers[i + 1]] = Utils.swap(numbers[i], numbers[i + 1]);
           finish = false;
         }
       }
@@ -51,7 +140,7 @@ class Sort {
     let index: number;
     
     if (numbers.length > 1) {
-      index = this.utils.partition(numbers, left, right);
+      index = Utils.partition(numbers, left, right);
       
       if (left < index - 1) this.quickSort(numbers, left, index - 1);      
       if (index < right) this.quickSort(numbers, index, right);
@@ -117,13 +206,13 @@ class Sort {
    */
   heapSort(numbers: number[]) {    
     for (let i = Math.floor(numbers.length / 2); i >= 0; i--) {
-      this.utils.siftDown(numbers, i, numbers.length-1);
+      Utils.siftDown(numbers, i, numbers.length-1);
     }
     
     for (let i = numbers.length - 1; i >= 1; i--) {
-      [numbers[0], numbers[i]] = this.utils.swap(numbers[0], numbers[i]);
+      [numbers[0], numbers[i]] = Utils.swap(numbers[0], numbers[i]);
       
-      this.utils.siftDown(numbers, 0, i - 1);
+      Utils.siftDown(numbers, 0, i - 1);
     }
   }
   
@@ -136,7 +225,7 @@ class Sort {
       
       this.mergeSort(numbers, begin, mid);
       this.mergeSort(numbers, mid, end);
-      numbers = this.utils.merge(numbers, begin, mid, end);
+      numbers = Utils.merge(numbers, begin, mid, end);
     }
     
     return numbers;

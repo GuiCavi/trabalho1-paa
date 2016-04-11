@@ -48,10 +48,7 @@ gulp.task('bs', function() {
 
 gulp.task('build-ts', function() {
 	gulp.src('src/ts/*.ts')
-			.pipe(ts({
-				noImplicitAny: true,
-				// out: "final.js"
-			}))
+			.pipe(ts())
 			.pipe(gulp.dest("dist/js"));
 });
 

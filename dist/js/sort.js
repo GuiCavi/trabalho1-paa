@@ -1,11 +1,86 @@
-"use strict";
-var Utils = require("./sortUtils");
+var Utils = (function () {
+    function Utils() {
+        console.log("Utils class loaded");
+    }
+    Utils.swap = function (a, b) {
+        return [b, a];
+    };
+    Utils.calculate = function (func, arr) {
+        var start = performance.now();
+        func(arr);
+        var end = performance.now();
+        return end - start;
+    };
+    Utils.generateHTML = function (arr, type) {
+        switch (type) {
+            case 'ul':
+                var $ul = document.createElement('ul');
+                for (var i = 0; i < arr.length; i++) {
+                    var $li = document.createElement('li');
+                    $li.textContent = arr[i];
+                    $ul.appendChild($li);
+                }
+                return $ul;
+            default:
+                break;
+        }
+    };
+    Utils.siftDown = function (numbers, root, bottom) {
+        var maxChild = root * 2 + 1;
+        if (maxChild < bottom) {
+            var otherChild = maxChild + 1;
+            maxChild = (numbers[otherChild] > numbers[maxChild]) ? otherChild : maxChild;
+        }
+        else if (maxChild > bottom)
+            return;
+        if (numbers[root] >= numbers[maxChild])
+            return;
+        _a = this.swap(numbers[root], numbers[maxChild]), numbers[root] = _a[0], numbers[maxChild] = _a[1];
+        this.siftDown(numbers, maxChild, bottom);
+        var _a;
+    };
+    Utils.merge = function (numbers, begin, mid, end) {
+        var temp = [], i = begin, j = mid, k = 0;
+        while (i < mid && j < end) {
+            if (numbers[i] <= numbers[j])
+                temp[k++] = numbers[i++];
+            else
+                temp[k++] = numbers[j++];
+        }
+        while (i < mid)
+            temp[k++] = numbers[i++];
+        while (j < end)
+            temp[k++] = numbers[j++];
+        for (i = begin; i < end; i++) {
+            numbers[i] = temp[i - begin];
+        }
+        return numbers;
+    };
+    /** Partition method */
+    Utils.partition = function (numbers, left, right) {
+        // let pivot: number = Math.floor(left+right / 2),
+        var pivot = left, i = left, j = right;
+        while (i <= j) {
+            while (numbers[i] < numbers[pivot])
+                i++;
+            while (numbers[j] > numbers[pivot])
+                j--;
+            if (i <= j) {
+                _a = this.swap(numbers[i], numbers[j]), numbers[i] = _a[0], numbers[j] = _a[1];
+                i++;
+                j--;
+            }
+        }
+        return i;
+        var _a;
+    };
+    return Utils;
+}());
 /**
  * Algorithms
  */
 var Sort = (function () {
     function Sort() {
-        this.utils = new Utils.Utils();
         console.log("new object of Sort");
     }
     /**
@@ -15,7 +90,7 @@ var Sort = (function () {
         for (var i = 0; i < numbers.length; i++) {
             for (var j = 0; j < numbers.length - 1; j++) {
                 if (numbers[j] > numbers[j + 1]) {
-                    _a = this.utils.swap(numbers[j], numbers[j + 1]), numbers[j] = _a[0], numbers[j + 1] = _a[1];
+                    _a = Utils.swap(numbers[j], numbers[j + 1]), numbers[j] = _a[0], numbers[j + 1] = _a[1];
                 }
             }
         }
@@ -30,7 +105,7 @@ var Sort = (function () {
             finish = true;
             for (var i = 0; i < numbers.length; i++) {
                 if (numbers[i] > numbers[i + 1]) {
-                    _a = this.utils.swap(numbers[i], numbers[i + 1]), numbers[i] = _a[0], numbers[i + 1] = _a[1];
+                    _a = Utils.swap(numbers[i], numbers[i + 1]), numbers[i] = _a[0], numbers[i + 1] = _a[1];
                     finish = false;
                 }
             }
@@ -44,7 +119,7 @@ var Sort = (function () {
     Sort.prototype.quickSort = function (numbers, left, right) {
         var index;
         if (numbers.length > 1) {
-            index = this.utils.partition(numbers, left, right);
+            index = Utils.partition(numbers, left, right);
             if (left < index - 1)
                 this.quickSort(numbers, left, index - 1);
             if (index < right)
@@ -101,11 +176,11 @@ var Sort = (function () {
      */
     Sort.prototype.heapSort = function (numbers) {
         for (var i = Math.floor(numbers.length / 2); i >= 0; i--) {
-            this.utils.siftDown(numbers, i, numbers.length - 1);
+            Utils.siftDown(numbers, i, numbers.length - 1);
         }
         for (var i = numbers.length - 1; i >= 1; i--) {
-            _a = this.utils.swap(numbers[0], numbers[i]), numbers[0] = _a[0], numbers[i] = _a[1];
-            this.utils.siftDown(numbers, 0, i - 1);
+            _a = Utils.swap(numbers[0], numbers[i]), numbers[0] = _a[0], numbers[i] = _a[1];
+            Utils.siftDown(numbers, 0, i - 1);
         }
         var _a;
     };
@@ -117,7 +192,7 @@ var Sort = (function () {
             var mid = Math.floor((begin + end) / 2);
             this.mergeSort(numbers, begin, mid);
             this.mergeSort(numbers, mid, end);
-            numbers = this.utils.merge(numbers, begin, mid, end);
+            numbers = Utils.merge(numbers, begin, mid, end);
         }
         return numbers;
     };
