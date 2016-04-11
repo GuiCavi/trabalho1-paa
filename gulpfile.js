@@ -59,7 +59,8 @@ gulp.task('build-ts', function() {
  * Watch task
  */
 gulp.task('watch', ['bs'], function() {
-	gulp.watch('*.jade', ['templates']);
+	gulp.watch('./*.jade', ['templates']);
+  gulp.watch('./src/jade/*.jade', ['templates'], function() {bs.reload();});
 	gulp.watch('src/sass/*.{sass, scss}', ['sass']);
 	gulp.watch('src/ts/*.ts', ['build-ts']);
 });
