@@ -56,7 +56,6 @@ var Utils = (function () {
         }
         return numbers;
     };
-    /** Partition method */
     Utils.partition = function (numbers, left, right) {
         // let pivot: number = Math.floor(left+right / 2),
         var pivot = left, i = left, j = right;

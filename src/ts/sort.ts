@@ -69,7 +69,6 @@ class Utils {
     return numbers;
   }
   
-  /** Partition method */
   public static partition(numbers: number[], left: number, right: number) {
     // let pivot: number = Math.floor(left+right / 2),
     let pivot: number = left,
