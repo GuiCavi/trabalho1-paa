@@ -11,7 +11,7 @@ fs.readdir('./', function(err, files) {
   var fileName = path.basename(process.argv[1]);
   for (var i = 0; i < files.length; i++) {
     if (files[i] != fileName) {
-      // console.log(files[i]);
+      console.log(files[i]);
       
       var len = files[i].substr(0, files[i].indexOf('.'));
       len = parseInt(len);

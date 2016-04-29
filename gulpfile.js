@@ -14,7 +14,7 @@ gulp.task('sass', function() {
 	gulp.src('src/sass/**/*.{sass, scss}')
 			.pipe(sass().on('error', sass.logError))
 			.pipe(autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9', 'ff 17', 'opera 12.1', 'ios 6', 'android 4'))
-			.pipe(gulp.dest('dis/css'))
+			.pipe(gulp.dest('dist/css'))
 			.pipe(bs.stream());
 });
 
@@ -48,7 +48,10 @@ gulp.task('bs', function() {
 
 gulp.task('build-ts', function() {
 	gulp.src('src/ts/*.ts')
-			.pipe(ts())
+			.pipe(ts({
+        target: 'es5',
+	      module: 'commonjs'
+      }))
 			.pipe(gulp.dest("dist/js"));
 });
 
@@ -56,10 +59,10 @@ gulp.task('build-ts', function() {
  * Watch task
  */
 gulp.task('watch', ['bs'], function() {
-	gulp.watch('./*.jade', ['templates']);
-  gulp.watch('./src/jade/*.jade', ['templates'], function() {bs.reload();});
+	gulp.watch('*.jade', ['templates']);
+  gulp.watch('src/jade/*.jade', ['templates'], function() {bs.reload();});
 	gulp.watch('src/sass/*.{sass, scss}', ['sass']);
-	gulp.watch('src/ts/*.ts', ['build-ts']);
+	gulp.watch('./src/ts/*.ts', ['build-ts']);
 });
 
 gulp.task('default', ['watch']);

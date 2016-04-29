@@ -3,99 +3,22 @@
 <head>
   <meta charset="UTF-8"/>
   <title>Document</title>
+  <style>
+    #executing {
+      position: fixed;
+      bottom: 0;
+      right: 0;
+      opacity: 0;
+      pointer-events: none;
+    }
+  </style>
 </head>
 <body>
-  <ul id="methods">
-    <li class="form-group">
-      <input id="method-bubble-1" type="checkbox" name="method" value="bubbleSort1"/>
-      <label for="method-bubble-1">BubbleSort Normal</label>
-    </li>
-    <li class="form-group">
-      <input id="method-bubble-2" type="checkbox" name="method" value="bubbleSort2"/>
-      <label for="method-bubble-2">BubbleSort Melhorado</label>
-    </li>
-    <li class="form-group">
-      <input id="method-quick-first" type="checkbox" name="method" value="quickSort"/>
-      <label for="method-quick-first">QuickSort</label>
-    </li>
-    <li class="form-group">
-      <input id="method-insertion" type="checkbox" name="method" value="insertionSort"/>
-      <label for="method-insertion">InsertionSort</label>
-    </li>
-    <li class="form-group">
-      <input id="method-shell" type="checkbox" name="method" value="shellSort"/>
-      <label for="method-shell">ShellSort</label>
-    </li>
-    <li class="form-group">
-      <input id="method-selection" type="checkbox" name="method" value="selectionSort"/>
-      <label for="method-selection">SelectionSort</label>
-    </li>
-    <li class="form-group">
-      <input id="method-heap" type="checkbox" name="method" value="heapSort"/>
-      <label for="method-heap">HeapSort</label>
-    </li>
-    <li class="form-group">
-      <input id="method-merge" type="checkbox" name="method" value="mergeSort"/>
-      <label for="method-merge">MergeSort</label>
-    </li>
-  </ul>
-  <ul id="times">
-    <li class="form-group">
-      <input id="times-10" type="radio" name="times" value="10"/>
-      <label for="times-10">10 vezes</label>
-    </li>
-    <li class="form-group">
-      <input id="times-20" type="radio" name="times" value="20"/>
-      <label for="times-20">20 vezes</label>
-    </li>
-    <li class="form-group">
-      <input id="times-30" type="radio" name="times" value="30"/>
-      <label for="times-30">30 vezes</label>
-    </li>
-    <li class="form-group">
-      <input id="times-40" type="radio" name="times" value="40"/>
-      <label for="times-40">40 vezes</label>
-    </li>
-  </ul>
-  <ul id="quantity">
-    <li>
-      <div class="form-group">
-        <input id="quantity-10k" type="checkbox" name="quantity" value="10000"/>
-        <label for="quantity-10k">10.000 Elementos</label>
-      </div>
-    </li>
-    <li>
-      <div class="form-group">
-        <input id="quantity-20k" type="checkbox" name="quantity" value="20000"/>
-        <label for="quantity-20k">20.000 Elementos</label>
-      </div>
-    </li>
-    <li>
-      <div class="form-group">
-        <input id="quantity-50k" type="checkbox" name="quantity" value="50000"/>
-        <label for="quantity-50k">50.000 Elementos</label>
-      </div>
-    </li>
-    <li>
-      <div class="form-group">
-        <input id="quantity-100k" type="checkbox" name="quantity" value="100000"/>
-        <label for="quantity-100k">100.000 Elementos</label>
-      </div>
-    </li>
-    <li>
-      <div class="form-group">
-        <input id="quantity-200k" type="checkbox" name="quantity" value="200000"/>
-        <label for="quantity-200k">200.000 Elementos</label>
-      </div>
-    </li>
-    <li>
-      <div class="form-group">
-        <input id="quantity-500k" type="checkbox" name="quantity" value="500000"/>
-        <label for="quantity-500k">500.000 Elementos</label>
-      </div>
-    </li>
-  </ul>
-  <button id="calculate">Computar</button>
+  <ul id="methods"></ul>
+  <ul id="times"></ul>
+  <ul id="quantities"></ul>
+  <button id="calculate">Computar</button><span id="executing">Executando...</span>
   <script src="./dist/js/sort.js"></script>
+  <script src="./dist/js/template.js"></script>
   <script src="./dist/js/script.js"></script>
 </body>

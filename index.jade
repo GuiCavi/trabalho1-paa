@@ -3,13 +3,23 @@ html(lang="en")
 head
   meta(charset="UTF-8")
   title Document
+  
+  style.
+    #executing {
+      position: fixed;
+      bottom: 0;
+      right: 0;
+      opacity: 0;
+      pointer-events: none;
+    }
 body
   
-  include src/jade/methods.jade
-  include src/jade/times.jade
-  include src/jade/quantity.jade
+  include src/jade/options.jade
   
   button#calculate Computar
   
+  span#executing Executando...
+  
   script(src="./dist/js/sort.js")
+  script(src="./dist/js/template.js")
   script(src="./dist/js/script.js")
