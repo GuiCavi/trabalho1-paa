@@ -60,11 +60,6 @@ window.addEventListener('load', () => {
   initInputs();
   
   let $calculate = document.getElementById('calculate');
-  let choosen = {
-    methods: [],
-    times: [],
-    quantities: []
-  } 
  
   $calculate.addEventListener('click', function(e) {
     e.preventDefault();
@@ -101,6 +96,12 @@ window.addEventListener('load', () => {
     
     /** If pass here, everything was choosen */
     
+    let choosen = {
+      methods: [],
+      times: [],
+      quantities: []
+    };
+    
     for (var i = 0; i < $methods.length; i++) {
       choosen.methods.push((<HTMLInputElement>$methods[i]).value); //VSCode shows an error, but it doesn't exists    
     }
@@ -115,7 +116,7 @@ window.addEventListener('load', () => {
     console.log(choosen.times);
     console.log(choosen.quantities);
     
-    executeFunctions();
+    executeFunctions(choosen);
     
   });
   
@@ -168,7 +169,7 @@ window.addEventListener('load', () => {
   };
   
   /** Execute the choosen methods N times for the number of inputs */
-  function executeFunctions() {
+  function executeFunctions(choosen) {
     let $executing = document.getElementById('executing');
     $executing.style.transition = 'opacity 0.3s cubic-bezier(0,0,0.3,1)';
     $executing.style.opacity = '1';
@@ -178,20 +179,44 @@ window.addEventListener('load', () => {
      * ["10"]
      * ["10000", "20000", "100000"]
      */
-    
-    _loadFile(choosen.quantities[0], function(data) {
-      let elements = data.split(/\n/g).map(parseFloat);
-      console.log(elements);
+    let i = 0;
+    choosen.methods.forEach((method) => {
       
-      let sort = new Sort();
-      sort.bubbleSort1(elements);
+      choosen.quantities.forEach((quantity) => {
+        let elements = null;
+        
+        _loadFile(quantity, function(data) {
+          elements = data.split(/\n/g).map(parseFloat);
+        });
+        
+        choosen.times.forEach((time) => {
+          
+          console.log(++i, method, quantity, time);
+          
+          for (let i = 0; i < time; ++i) {
+            // console.log(elements);
+            
+            let sort = new Sort(),
+                fn = sort[method];
+            
+            let start = performance.now();
+            fn(elements);
+            let end = performance.now();
+            
+            console.log(i+1, end-start);
+            
+            
+            // console.log(elements);
+          }
+          
+        });
+        
+      });
       
-      console.log(elements);
-     
     });
   }
   
-  function _loadFile(fileName, cb) {
+  function _loadFile(fileName, cb) {    
     let xhr = (XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP"));
     
     xhr.open('GET', './assets/elements/'+fileName+'.txt', false);

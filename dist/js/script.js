@@ -54,11 +54,6 @@ var times = [10, 20, 30, 40];
 window.addEventListener('load', function () {
     initInputs();
     var $calculate = document.getElementById('calculate');
-    var choosen = {
-        methods: [],
-        times: [],
-        quantities: []
-    };
     $calculate.addEventListener('click', function (e) {
         e.preventDefault();
         /**
@@ -86,6 +81,11 @@ window.addEventListener('load', function () {
             return;
         }
         /** If pass here, everything was choosen */
+        var choosen = {
+            methods: [],
+            times: [],
+            quantities: []
+        };
         for (var i = 0; i < $methods.length; i++) {
             choosen.methods.push($methods[i].value); //VSCode shows an error, but it doesn't exists    
         }
@@ -98,7 +98,7 @@ window.addEventListener('load', function () {
         console.log(choosen.methods);
         console.log(choosen.times);
         console.log(choosen.quantities);
-        executeFunctions();
+        executeFunctions(choosen);
     });
     /*************
      * Functions *
@@ -142,7 +142,7 @@ window.addEventListener('load', function () {
     }
     ;
     /** Execute the choosen methods N times for the number of inputs */
-    function executeFunctions() {
+    function executeFunctions(choosen) {
         var $executing = document.getElementById('executing');
         $executing.style.transition = 'opacity 0.3s cubic-bezier(0,0,0.3,1)';
         $executing.style.opacity = '1';
@@ -151,12 +151,25 @@ window.addEventListener('load', function () {
          * ["10"]
          * ["10000", "20000", "100000"]
          */
-        _loadFile(choosen.quantities[0], function (data) {
-            var elements = data.split(/\n/g).map(parseFloat);
-            console.log(elements);
-            var sort = new Sort();
-            sort.bubbleSort1(elements);
-            console.log(elements);
+        var i = 0;
+        choosen.methods.forEach(function (method) {
+            choosen.quantities.forEach(function (quantity) {
+                var elements = null;
+                _loadFile(quantity, function (data) {
+                    elements = data.split(/\n/g).map(parseFloat);
+                });
+                choosen.times.forEach(function (time) {
+                    console.log(++i, method, quantity, time);
+                    for (var i_1 = 0; i_1 < time; ++i_1) {
+                        // console.log(elements);
+                        var sort = new Sort(), fn = sort[method];
+                        var start = performance.now();
+                        fn(elements);
+                        var end = performance.now();
+                        console.log(i_1 + 1, end - start);
+                    }
+                });
+            });
         });
     }
     function _loadFile(fileName, cb) {

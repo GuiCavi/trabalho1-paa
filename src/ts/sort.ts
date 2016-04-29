@@ -95,7 +95,7 @@ class Utils {
  */
 class Sort {
   constructor() {
-    console.log("new object of Sort");
+    
   }
   
   /**
@@ -135,7 +135,10 @@ class Sort {
   /**
    * Quick sort
    */
-  quickSort(numbers: number[], left: number, right: number) {
+  quickSort(numbers: number[]) {
+    this._quickSort(numbers, 0, numbers.length-1);
+  }
+  _quickSort(numbers: number[], left: number, right: number) {
     let index: number;
     
     if (numbers.length > 1) {
@@ -218,7 +221,10 @@ class Sort {
   /**
    * Merge Sort
    */
-  mergeSort(numbers: number[], begin:number, end: number) {
+  mergeSort(numbers: number[]) {
+    this._mergeSort(numbers, 0, numbers.length);
+  }  
+  _mergeSort(numbers: number[], begin:number, end: number) {
     if (begin < end -1) {
       let mid = Math.floor((begin + end) / 2);      
       
