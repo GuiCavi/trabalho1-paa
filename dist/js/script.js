@@ -146,6 +146,7 @@ window.addEventListener('load', function () {
         var $executing = document.getElementById('executing');
         $executing.style.transition = 'opacity 0.3s cubic-bezier(0,0,0.3,1)';
         $executing.style.opacity = '1';
+        var results = {};
         /**
          * ["insertionSort", "selectionSort", "heapSort"]
          * ["10"]
@@ -153,8 +154,10 @@ window.addEventListener('load', function () {
          */
         var i = 0;
         choosen.methods.forEach(function (method) {
+            results[method] = {};
             choosen.quantities.forEach(function (quantity) {
                 var elements = null;
+                results[method][quantity] = [];
                 _loadFile(quantity, function (data) {
                     elements = data.split(/\n/g).map(parseFloat);
                 });
@@ -164,13 +167,20 @@ window.addEventListener('load', function () {
                         // console.log(elements);
                         var sort = new Sort(), fn = sort[method];
                         var start = performance.now();
-                        fn(elements);
+                        fn(elements.slice(0));
                         var end = performance.now();
                         console.log(i_1 + 1, end - start);
+                        results[method][quantity].push(end - start);
                     }
                 });
             });
         });
+        console.dir(results);
+        /** Testing */
+        var chartCtrl = new ChartController();
+        var yValues = chartCtrl.fixValues(results);
+        chartCtrl.plotChart(choosen.quantities, yValues);
+        /** Testing */
     }
     function _loadFile(fileName, cb) {
         var xhr = (XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP"));
@@ -183,3 +193,47 @@ window.addEventListener('load', function () {
         xhr.send();
     }
 });
+/**
+ * ChartController
+ */
+var ChartController = (function () {
+    function ChartController() {
+    }
+    ChartController.prototype.plotChart = function (x, values) {
+        console.log(values);
+        var traces = [];
+        for (var method in values) {
+            traces.push({
+                x: x,
+                y: values[method],
+                mode: 'scatter',
+                name: method
+            });
+        }
+        var layout = {
+            title: 'Teste',
+            xaxis: {
+                range: x
+            }
+        };
+        Plotly.newPlot('chart', traces, layout);
+    };
+    ChartController.prototype.fixValues = function (values) {
+        var _values = {};
+        for (var method in values) {
+            var objQuantities = values[method];
+            _values[method] = [];
+            for (var quantity in objQuantities) {
+                var arrayTimes = objQuantities[quantity];
+                var avg = 0;
+                for (var i = 0; i < arrayTimes.length; ++i) {
+                    avg += arrayTimes[i];
+                }
+                avg /= arrayTimes.length;
+                _values[method].push(avg);
+            }
+        }
+        return _values;
+    };
+    return ChartController;
+}());

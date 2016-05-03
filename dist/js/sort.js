@@ -114,19 +114,20 @@ var Sort = (function () {
     /**
      * Quick sort
      */
-    Sort.prototype.quickSort = function (numbers) {
-        this._quickSort(numbers, 0, numbers.length - 1);
-    };
     Sort.prototype._quickSort = function (numbers, left, right) {
         var index;
         if (numbers.length > 1) {
             index = Utils.partition(numbers, left, right);
             if (left < index - 1)
-                this.quickSort(numbers, left, index - 1);
+                this._quickSort(numbers, left, index - 1);
             if (index < right)
-                this.quickSort(numbers, index, right);
+                this._quickSort(numbers, index, right);
         }
         return numbers;
+    };
+    Sort.prototype.quickSort = function (numbers) {
+        var _this = this;
+        (function () { return _this._quickSort(numbers, 0, numbers.length - 1); });
     };
     /**
      * Insertion Sort
@@ -189,13 +190,14 @@ var Sort = (function () {
      * Merge Sort
      */
     Sort.prototype.mergeSort = function (numbers) {
-        this._mergeSort(numbers, 0, numbers.length);
+        var _this = this;
+        (function () { return _this._mergeSort(numbers, 0, numbers.length); });
     };
     Sort.prototype._mergeSort = function (numbers, begin, end) {
         if (begin < end - 1) {
             var mid = Math.floor((begin + end) / 2);
-            this.mergeSort(numbers, begin, mid);
-            this.mergeSort(numbers, mid, end);
+            this._mergeSort(numbers, begin, mid);
+            this._mergeSort(numbers, mid, end);
             numbers = Utils.merge(numbers, begin, mid, end);
         }
         return numbers;
