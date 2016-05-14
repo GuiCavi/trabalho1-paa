@@ -1,0 +1,209 @@
+@import url(../fonts/robotodraft/robotodraft.css);
+.card {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); }
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0; }
+
+input[type=checkbox] ~ label::before {
+  content: "\F131"; }
+
+input[type=radio] ~ label::before {
+  content: "\F43D"; }
+
+input[type=checkbox]:checked ~ label::before {
+  content: "\F132"; }
+
+input[type=radio]:checked ~ label::before {
+  content: "\F43E"; }
+
+.z-depth-0 {
+  box-shadow: none !important; }
+
+.z-depth-1, #calculate {
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12); }
+
+.z-depth-2, #calculate:hover {
+  box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15); }
+
+.z-depth-3 {
+  box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); }
+
+.z-depth-4 {
+  box-shadow: 0 12px 15px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19); }
+
+.z-depth-5 {
+  box-shadow: 0 16px 28px 0 rgba(0, 0, 0, 0.22), 0 25px 55px 0 rgba(0, 0, 0, 0.21); }
+
+.z-depth-6 {
+  box-shadow: 0 27px 24px 0 rgba(0, 0, 0, 0.2), 0 40px 77px 0 rgba(0, 0, 0, 0.22); }
+
+* {
+  margin: 0;
+  padding: 0; }
+  *::before, *::after {
+    box-sizing: border-box; }
+
+html {
+  height: 100%; }
+
+body {
+  min-height: 100%;
+  background-color: #f1f1f1;
+  font-family: 'Roboto', arial;
+  color: #333;
+  padding: 10px 0; }
+
+ul {
+  padding: 0;
+  margin: 0;
+  list-style: none; }
+
+a:hover {
+  text-decoration: none; }
+
+.card {
+  background-color: #fff;
+  padding: 8px;
+  margin-bottom: 10px;
+  border-radius: 2px; }
+  .card h2 {
+    margin-top: 16px;
+    padding: 0 8px 12px;
+    font-size: 24px;
+    color: #cd201f; }
+  .card small.subtext {
+    font-weight: bold;
+    padding: 0 8px 16px; }
+
+.list {
+  padding: 8px; }
+  .list li {
+    position: relative;
+    padding: 8px 20px; }
+
+input[type=radio], input[type=checkbox] {
+  display: none; }
+  input[type=radio] ~ label, input[type=checkbox] ~ label {
+    position: relative;
+    padding-left: 8px;
+    margin: 0;
+    cursor: pointer;
+    font-weight: normal;
+    font-size: 16px; }
+    input[type=radio] ~ label::before, input[type=checkbox] ~ label::before {
+      font-family: "Material Design Icons";
+      position: absolute;
+      left: -20px;
+      font-size: 22px;
+      top: 50%;
+      -webkit-transform: translateY(-50%);
+              transform: translateY(-50%);
+      color: rgba(0, 0, 0, 0.54); }
+  input[type=radio]:checked ~ label::before, input[type=checkbox]:checked ~ label::before {
+    color: #cd201f; }
+
+.tabs nav {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-justify-content: flex-start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  border-bottom: 1px solid rgba(204, 204, 204, 0.22); }
+  .tabs nav a {
+    line-height: 40px;
+    height: 40px;
+    padding: 0 12px;
+    border-bottom: 2px solid transparent;
+    color: #333; }
+    .tabs nav a.active {
+      border-bottom-color: #cd201f;
+      font-weight: bold; }
+
+.tabs section > div {
+  display: none;
+  position: relative;
+  padding: 8px; }
+  .tabs section > div.active {
+    display: block; }
+
+.chart {
+  width: 100%;
+  height: auto; }
+
+.btn {
+  letter-spacing: 0.5px;
+  text-transform: uppercase; }
+
+#calculate {
+  background-color: #cd201f;
+  border-radius: 2px;
+  display: block;
+  width: 100%;
+  color: #fff;
+  transition: box-shadow 0.15s cubic-bezier(0, 0, 0.31, 1);
+  margin-bottom: 10px; }
+
+.alert {
+  margin: 0; }
+  .alert.bottom-right {
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    z-index: 999;
+    background-color: #333;
+    min-width: 160px;
+    color: #fff; }
+
+#status {
+  opacity: 0;
+  pointer-events: none;
+  -webkit-animation: bottomUpDisappear 0.3s cubic-bezier(0, 0, 0.31, 1) forwards;
+          animation: bottomUpDisappear 0.3s cubic-bezier(0, 0, 0.31, 1) forwards; }
+  #status.show {
+    -webkit-animation: bottomUpAppear 0.3s cubic-bezier(0, 0, 0.31, 1) forwards;
+            animation: bottomUpAppear 0.3s cubic-bezier(0, 0, 0.31, 1) forwards; }
+
+@-webkit-keyframes bottomUpAppear {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateY(100%);
+            transform: translateY(100%); }
+  100% {
+    opacity: 1;
+    -webkit-transform: translateY(0%);
+            transform: translateY(0%); } }
+
+@keyframes bottomUpAppear {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateY(100%);
+            transform: translateY(100%); }
+  100% {
+    opacity: 1;
+    -webkit-transform: translateY(0%);
+            transform: translateY(0%); } }
+
+@-webkit-keyframes bottomUpDisappear {
+  0% {
+    opacity: 1;
+    -webkit-transform: translateY(0%);
+            transform: translateY(0%); }
+  100% {
+    opacity: 0;
+    -webkit-transform: translateY(100%);
+            transform: translateY(100%); } }
+
+@keyframes bottomUpDisappear {
+  0% {
+    opacity: 1;
+    -webkit-transform: translateY(0%);
+            transform: translateY(0%); }
+  100% {
+    opacity: 0;
+    -webkit-transform: translateY(100%);
+            transform: translateY(100%); } }

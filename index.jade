@@ -1,28 +1,27 @@
 <!DOCTYPE html>
-html(lang="en")
-head
-  meta(charset="UTF-8")
-  title Document
-  
-  style.
-    #executing {
-      position: fixed;
-      bottom: 0;
-      right: 0;
-      opacity: 0;
-      pointer-events: none;
-    }
-body
-  
-  include src/jade/options.jade
-  
-  button#calculate Computar
-  
-  span#executing Executando...
-  
-  #chart(style="width: 600px; height: 500px;")
-  
-  script(src="./dist/js/plotly.min.js")
-  script(src="./dist/js/sort.js")
-  script(src="./dist/js/template.js")
-  script(src="./dist/js/script.js")
+html
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+    
+    link(rel="stylesheet", href="./dist/css/mdi.min.css")
+    link(rel="stylesheet", href="./dist/css/bootstrap.min.css")
+    link(rel="stylesheet", href="./dist/css/styles.css")
+      
+    title Trabalho de PAA
+  body
+    .alert.alert-danger.bottom-right#status Aguarde, estamos processando as entradas...
+    .container-fluid
+      .row
+        include src/jade/options.jade
+      .row
+        .col-xs-12
+          include src/jade/charts.jade
+    
+    script(src="./dist/js/jquery.min.js")
+    script(src="./dist/js/bootstrap.min.js")
+    script(src="./dist/js/plotly.min.js")
+    script(src="./dist/js/UI.js")
+    script(src="./dist/js/sort.js")
+    script(src="./dist/js/template.js")
+    script(src="./dist/js/script.js")

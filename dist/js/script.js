@@ -13,7 +13,8 @@ var methods = [
     {
         id: 'quick-sort',
         value: 'quickSort',
-        text: 'QuickSort'
+        text: 'QuickSort',
+        checked: true
     },
     {
         id: 'insertion-sort',
@@ -48,11 +49,43 @@ var quantities = [
     '50000',
     '100000',
     '200000',
-    '500000'
+    '500000',
+    '1000000'
 ];
 var times = [10, 20, 30, 40];
+var charac = [
+    {
+        id: 'ascending',
+        value: 'ascending',
+        text: 'Ordem Crescente'
+    },
+    {
+        id: 'random',
+        value: 'random',
+        text: 'Números aleatórios',
+        checked: true
+    },
+    {
+        id: 'descending',
+        value: 'descending',
+        text: 'Ordem Decrescente'
+    }
+];
 window.addEventListener('load', function () {
     initInputs();
+    new ChartController().plotChart({
+        x: quantities.map(parseFloat),
+        y: [],
+        id: 'chart',
+        title: 'Tempo médio de execução',
+        xaxis: {
+            title: 'Número de elementos'
+        },
+        yaxis: {
+            title: 'Tempo (ms)'
+        },
+        mode: 'scatter'
+    });
     var $calculate = document.getElementById('calculate');
     $calculate.addEventListener('click', function (e) {
         e.preventDefault();
@@ -80,24 +113,37 @@ window.addEventListener('load', function () {
             alert('Não foi escolhido nenhuma quantidade de elementos');
             return;
         }
+        /**
+             * Retrieving the charac of elements
+             */
+        var $charac = document.querySelectorAll('input[name="charac"]:checked');
+        if ($charac.length <= 0) {
+            alert('Não foi escolhido nenhuma característca para os elementos');
+            return;
+        }
         /** If pass here, everything was choosen */
         var choosen = {
             methods: [],
             times: [],
-            quantities: []
+            quantities: [],
+            charac: []
         };
         for (var i = 0; i < $methods.length; i++) {
-            choosen.methods.push($methods[i].value); //VSCode shows an error, but it doesn't exists    
+            choosen.methods.push($methods[i].value);
         }
         for (var i = 0; i < $times.length; i++) {
-            choosen.times.push($times[i].value); //VSCode shows an error, but it doesn't exists    
+            choosen.times.push($times[i].value);
         }
         for (var i = 0; i < $quantity.length; i++) {
-            choosen.quantities.push($quantity[i].value); //VSCode shows an error, but it doesn't exists    
+            choosen.quantities.push($quantity[i].value);
+        }
+        for (var i = 0; i < $charac.length; i++) {
+            choosen.charac.push($charac[i].value);
         }
         console.log(choosen.methods);
         console.log(choosen.times);
         console.log(choosen.quantities);
+        console.log(choosen.charac);
         executeFunctions(choosen);
     });
     /*************
@@ -113,6 +159,7 @@ window.addEventListener('load', function () {
                 name: 'method',
                 value: methods[i].value,
                 text: methods[i].text,
+                checked: methods[i].checked
             });
             $methods.appendChild($li);
         }
@@ -123,7 +170,7 @@ window.addEventListener('load', function () {
                 type: 'radio',
                 name: 'times',
                 value: times[i],
-                text: times[i] + ' vezes',
+                text: times[i] + ' vezes'
             });
             $times.appendChild($li);
         }
@@ -135,62 +182,75 @@ window.addEventListener('load', function () {
                 type: 'checkbox',
                 name: 'quantities',
                 value: quantities[i],
-                text: formattedNumber + ' elementos',
+                text: formattedNumber + ' elementos'
             });
             $quantities.appendChild($li);
+        }
+        var $charac = document.getElementById('charac');
+        for (var i = 0, len = charac.length; i < len; i++) {
+            var $li = Template.methodInputGroup({
+                id: charac[i].id,
+                type: 'checkbox',
+                name: 'charac',
+                value: charac[i].value,
+                text: charac[i].text,
+                checked: charac[i].checked
+            });
+            $charac.appendChild($li);
         }
     }
     ;
     /** Execute the choosen methods N times for the number of inputs */
     function executeFunctions(choosen) {
-        var $executing = document.getElementById('executing');
-        $executing.style.transition = 'opacity 0.3s cubic-bezier(0,0,0.3,1)';
-        $executing.style.opacity = '1';
+        var $status = document.getElementById('status');
         var results = {};
+        $status.classList.add('show');
         /**
          * ["insertionSort", "selectionSort", "heapSort"]
          * ["10"]
          * ["10000", "20000", "100000"]
          */
-        var i = 0;
-        choosen.methods.forEach(function (method) {
-            results[method] = {};
-            choosen.quantities.forEach(function (quantity) {
-                var elements = null;
-                results[method][quantity] = [];
-                _loadFile(quantity, function (data) {
-                    elements = data.split(/\n/g).map(parseFloat);
-                });
-                choosen.times.forEach(function (time) {
-                    console.log(++i, method, quantity, time);
-                    for (var i_1 = 0; i_1 < time; ++i_1) {
-                        // console.log(elements);
-                        var sort = new Sort(), fn = sort[method];
-                        var start = performance.now();
-                        fn(elements.slice(0));
-                        var end = performance.now();
-                        console.log(i_1 + 1, end - start);
-                        results[method][quantity].push(end - start);
-                    }
-                });
+        var worker = new Worker("dist/js/exec.js");
+        worker.postMessage([choosen.methods, choosen.quantities, choosen.times, choosen.charac]);
+        worker.onmessage = function (e) {
+            console.log('onmessage do worker', e.data);
+            var results = e.data;
+            $status.textContent = "Plotando os gráficos";
+            setTimeout(function () {
+                $status.classList.remove('show');
+            }, 2000);
+            /** Plotting the chart */
+            var chartCtrl = new ChartController();
+            var yValues = chartCtrl.fixValues(results);
+            console.log("Y", yValues);
+            chartCtrl.plotChart({
+                x: choosen.quantities,
+                y: yValues,
+                id: 'chart',
+                title: 'Tempo médio de execução',
+                xaxis: {
+                    title: 'Número de elementos'
+                },
+                yaxis: {
+                    title: 'Tempo (ms)'
+                },
+                mode: 'scatter'
             });
-        });
-        console.dir(results);
-        /** Testing */
-        var chartCtrl = new ChartController();
-        var yValues = chartCtrl.fixValues(results);
-        chartCtrl.plotChart(choosen.quantities, yValues);
-        /** Testing */
-    }
-    function _loadFile(fileName, cb) {
-        var xhr = (XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP"));
-        xhr.open('GET', './assets/elements/' + fileName + '.txt', false);
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState == 4 && xhr.status == 200) {
-                cb(xhr.responseText);
+            var $chartsNav = document.querySelector('#charts nav');
+            for (var method in results) {
+                var methodObj = {};
+                for (var i in methods) {
+                    if (methods[i].value == method)
+                        methodObj = methods[i];
+                }
+                var $a = Template.chartNav({
+                    method: method,
+                    text: methodObj.text
+                });
+                $chartsNav.appendChild($a);
             }
+            /** Plotting the chart */
         };
-        xhr.send();
     }
 });
 /**
@@ -199,24 +259,28 @@ window.addEventListener('load', function () {
 var ChartController = (function () {
     function ChartController() {
     }
-    ChartController.prototype.plotChart = function (x, values) {
-        console.log(values);
+    ChartController.prototype.plotChart = function (options) {
+        var x = options.x.map(parseFloat), y = options.y;
+        console.log(x);
         var traces = [];
-        for (var method in values) {
+        for (var method in y) {
             traces.push({
                 x: x,
-                y: values[method],
-                mode: 'scatter',
+                y: y[method],
+                mode: options.mode,
                 name: method
             });
         }
         var layout = {
-            title: 'Teste',
+            title: options.title,
             xaxis: {
                 range: x
-            }
+            },
+            yaxis: {}
         };
-        Plotly.newPlot('chart', traces, layout);
+        layout['xaxis']['title'] = options.xaxis.title || '';
+        layout['yaxis']['title'] = options.yaxis.title || '';
+        Plotly.newPlot(options.id, traces, layout);
     };
     ChartController.prototype.fixValues = function (values) {
         var _values = {};
@@ -226,7 +290,9 @@ var ChartController = (function () {
             for (var quantity in objQuantities) {
                 var arrayTimes = objQuantities[quantity];
                 var avg = 0;
-                for (var i = 0; i < arrayTimes.length; ++i) {
+                // let min = objQuantities[quantity][0];
+                for (var i = 1; i < arrayTimes.length; ++i) {
+                    // if (arrayTimes[i] < min) min = arrayTimes[i];
                     avg += arrayTimes[i];
                 }
                 avg /= arrayTimes.length;

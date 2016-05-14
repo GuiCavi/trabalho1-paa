@@ -1,305 +1,366 @@
 'use strict';
 
 let methods = [
-  {
-    id: 'bubble-sort-1',
-    value: 'bubbleSort1',
-    text: 'BubbleSort Normal'
-  },
-  {
-    id: 'bubble-sort-2',
-    value: 'bubbleSort2',
-    text: 'BubbleSort Melhorado'
-  },
-  {
-    id: 'quick-sort',
-    value: 'quickSort',
-    text: 'QuickSort'
-  },
-  {
-    id: 'insertion-sort',
-    value: 'insertionSort',
-    text: 'InsertionSort'
-  },
-  {
-    id: 'shell-sort',
-    value: 'shellSort',
-    text: 'ShellSort'
-  },
-  { 
-    id: 'selection-sort',
-    value: 'selectionSort',
-    text: 'SelectionSort'
-  },
-  { 
-    id: 'heap-sort',
-    value: 'heapSort',
-    text: 'HeapSort'
-  },
-  { 
-    id: 'merge-sort',
-    value: 'mergeSort',
-    text: 'MergeSort'
-  }
+	{
+		id: 'bubble-sort-1',
+		value: 'bubbleSort1',
+		text: 'BubbleSort Normal'
+	},
+	{
+		id: 'bubble-sort-2',
+		value: 'bubbleSort2',
+		text: 'BubbleSort Melhorado'
+	},
+	{
+		id: 'quick-sort',
+		value: 'quickSort',
+		text: 'QuickSort',
+    checked: true
+	},
+	{
+		id: 'insertion-sort',
+		value: 'insertionSort',
+		text: 'InsertionSort'
+	},
+	{
+		id: 'shell-sort',
+		value: 'shellSort',
+		text: 'ShellSort'
+	},
+	{ 
+		id: 'selection-sort',
+		value: 'selectionSort',
+		text: 'SelectionSort'
+	},
+	{ 
+		id: 'heap-sort',
+		value: 'heapSort',
+		text: 'HeapSort'
+	},
+	{ 
+		id: 'merge-sort',
+		value: 'mergeSort',
+		text: 'MergeSort'
+	}
 ];
 
 let quantities = [
-  '20',
-  '10000',
-  '20000',
-  '50000',
-  '100000',
-  '200000',
-  '500000'
+	'20',
+	'10000',
+	'20000',
+	'50000',
+	'100000',
+	'200000',
+	'500000',
+	'1000000'
 ];
 
 let times = [ 10, 20, 30, 40 ];
 
+let charac = [
+  { 
+		id: 'ascending',
+		value: 'ascending',
+		text: 'Ordem Crescente'
+	},
+	{ 
+		id: 'random',
+		value: 'random',
+		text: 'Números aleatórios',
+    checked: true
+	},
+	{ 
+		id: 'descending',
+		value: 'descending',
+		text: 'Ordem Decrescente'
+	}
+];
+
 window.addEventListener('load', () => {
+	
+	initInputs();
   
-  initInputs();
-  
-  let $calculate = document.getElementById('calculate');
- 
-  $calculate.addEventListener('click', function(e) {
-    e.preventDefault();
-    
-    /**
-     * Retrieving methods selected
-     */
-    let $methods = document.querySelectorAll('input[name="method"]:checked');
-    
-    if ($methods.length <= 0) {
-      alert('Selecione pelo menos 1 método de ordenação'); 
-      return;
-    }
-    
-    /**
-     * Retrieving how many times it will be executed
-     */
-    let $times = document.querySelectorAll('input[name="times"]:checked');
-    
-    if ($times.length <= 0) {
-      alert('Não foi escolhido nenhuma quantidade de repetições');
-      return;
-    }
-    
-    /**
-     * Retrieving the quantity of elements 
-     */  
-    let $quantity = document.querySelectorAll('input[name="quantities"]:checked');
-    
-    if ($quantity.length <= 0) {
-      alert('Não foi escolhido nenhuma quantidade de elementos');
-      return;
-    }
-    
-    /** If pass here, everything was choosen */
-    
-    let choosen = {
-      methods: [],
-      times: [],
-      quantities: []
-    };
-    
-    for (var i = 0; i < $methods.length; i++) {
-      choosen.methods.push((<HTMLInputElement>$methods[i]).value); //VSCode shows an error, but it doesn't exists    
-    }
-    for (var i = 0; i < $times.length; i++) {
-      choosen.times.push((<HTMLInputElement>$times[i]).value); //VSCode shows an error, but it doesn't exists    
-    }
-    for (var i = 0; i < $quantity.length; i++) {
-      choosen.quantities.push((<HTMLInputElement>$quantity[i]).value); //VSCode shows an error, but it doesn't exists    
-    }
-    
-    console.log(choosen.methods);
-    console.log(choosen.times);
-    console.log(choosen.quantities);
-    
-    executeFunctions(choosen);
-    
+  new ChartController().plotChart({
+    x: quantities.map(parseFloat),
+    y: [],
+    id: 'chart',
+    title: 'Tempo médio de execução',
+    xaxis: {
+      title: 'Número de elementos'
+    },
+    yaxis: {
+      title: 'Tempo (ms)'
+    },
+    mode: 'scatter'
   });
-  
-  /*************
-   * Functions *
-   *************/
-   
-  /** Dynamically creates inputs based on array of settings */
-  function initInputs() {
-    let $methods = document.getElementById('methods');
-    for (let i = 0, len = methods.length; i < len; i++) {
-      let $li = Template.methodInputGroup({
-        id: methods[i].id,
-        type: 'checkbox',
-        name: 'method',
-        value: methods[i].value,
-        text: methods[i].text,
-      });
+	
+	let $calculate = document.getElementById('calculate');
+ 
+	$calculate.addEventListener('click', function(e) {
+		e.preventDefault();
+		
+		/**
+		 * Retrieving methods selected
+		 */
+		let $methods = document.querySelectorAll('input[name="method"]:checked');
+		
+		if ($methods.length <= 0) {
+			alert('Selecione pelo menos 1 método de ordenação'); 
+			return;
+		}
+		
+		/**
+		 * Retrieving how many times it will be executed
+		 */
+		let $times = document.querySelectorAll('input[name="times"]:checked');
+		
+		if ($times.length <= 0) {
+			alert('Não foi escolhido nenhuma quantidade de repetições');
+			return;
+		}
+		
+		/**
+		 * Retrieving the quantity of elements 
+		 */  
+		let $quantity = document.querySelectorAll('input[name="quantities"]:checked');
+		
+		if ($quantity.length <= 0) {
+			alert('Não foi escolhido nenhuma quantidade de elementos');
+			return;
+		}
+		
+    /**
+		 * Retrieving the charac of elements 
+		 */  
+		let $charac = document.querySelectorAll('input[name="charac"]:checked');
+		
+		if ($charac.length <= 0) {
+			alert('Não foi escolhido nenhuma característca para os elementos');
+			return;
+		}
     
-      $methods.appendChild($li);
-    }
+		/** If pass here, everything was choosen */
+		
+		let choosen = {
+			methods: [],
+			times: [],
+			quantities: [],
+      charac: []
+		};
+		
+		for (var i = 0; i < $methods.length; i++) {
+			choosen.methods.push((<HTMLInputElement>$methods[i]).value);    
+		}
+		for (var i = 0; i < $times.length; i++) {
+			choosen.times.push((<HTMLInputElement>$times[i]).value);    
+		}
+		for (var i = 0; i < $quantity.length; i++) {
+			choosen.quantities.push((<HTMLInputElement>$quantity[i]).value);    
+		}
+    for (var i = 0; i < $charac.length; i++) {
+			choosen.charac.push((<HTMLInputElement>$charac[i]).value);    
+		}
+		
+		console.log(choosen.methods);
+		console.log(choosen.times);
+		console.log(choosen.quantities);
+		console.log(choosen.charac);
+		
+		executeFunctions(choosen);
+		
+	});
+	
+	/*************
+	 * Functions *
+	 *************/
+	 
+	/** Dynamically creates inputs based on array of settings */
+	function initInputs() {
+		let $methods = document.getElementById('methods');
+		for (let i = 0, len = methods.length; i < len; i++) {
+			let $li = Template.methodInputGroup({
+				id: methods[i].id,
+				type: 'checkbox',
+				name: 'method',
+				value: methods[i].value,
+				text: methods[i].text,
+        checked: methods[i].checked
+			});
+		
+			$methods.appendChild($li);
+		}
+		
+		let $times = document.getElementById('times');
+		for (let i = 0, len = times.length; i < len; i++) {
+			let $li = Template.methodInputGroup({
+				id: 'times-' + times[i],
+				type: 'radio',
+				name: 'times',
+				value: times[i],
+				text: times[i] + ' vezes'
+			});
+		
+			$times.appendChild($li);
+		}
+		
+		let $quantities = document.getElementById('quantities');
+		for (let i = 0, len = quantities.length; i < len; i++) {
+			let formattedNumber = (""+quantities[i]).split('').reverse().join('').match(/\d{1,3}/g).join('.').split('').reverse().join('');
+			
+			let $li = Template.methodInputGroup({
+				id: 'quantities-' + quantities[i],
+				type: 'checkbox',
+				name: 'quantities',
+				value: quantities[i],
+				text: formattedNumber + ' elementos'
+			});
+		
+			$quantities.appendChild($li);
+		}
     
-    let $times = document.getElementById('times');
-    for (let i = 0, len = times.length; i < len; i++) {
-      let $li = Template.methodInputGroup({
-        id: 'times-' + times[i],
-        type: 'radio',
-        name: 'times',
-        value: times[i],
-        text: times[i] + ' vezes',
-      });
+    let $charac = document.getElementById('charac');
+		for (let i = 0, len = charac.length; i < len; i++) {
+			let $li = Template.methodInputGroup({
+				id: charac[i].id,
+				type: 'checkbox',
+				name: 'charac',
+				value: charac[i].value,
+				text: charac[i].text,
+        checked: charac[i].checked
+			});
+		
+			$charac.appendChild($li);
+		}
+	};
+	
+	/** Execute the choosen methods N times for the number of inputs */
+	function executeFunctions(choosen) {
+		let $status = document.getElementById('status');     
+		let results = {};
     
-      $times.appendChild($li);
-    }
-    
-    let $quantities = document.getElementById('quantities');
-    for (let i = 0, len = quantities.length; i < len; i++) {
-      let formattedNumber = (""+quantities[i]).split('').reverse().join('').match(/\d{1,3}/g).join('.').split('').reverse().join('');
+    $status.classList.add('show');
+
+		/** 
+		 * ["insertionSort", "selectionSort", "heapSort"]
+		 * ["10"]
+		 * ["10000", "20000", "100000"]
+		 */
+    let worker = new Worker("dist/js/exec.js");
+    worker.postMessage([choosen.methods, choosen.quantities, choosen.times, choosen.charac]);
+    worker.onmessage = function(e) {
+      console.log('onmessage do worker', e.data);
       
-      let $li = Template.methodInputGroup({
-        id: 'quantities-' + quantities[i],
-        type: 'checkbox',
-        name: 'quantities',
-        value: quantities[i],
-        text: formattedNumber + ' elementos',
-      });
-    
-      $quantities.appendChild($li);
-    }
-  };
-  
-  /** Execute the choosen methods N times for the number of inputs */
-  function executeFunctions(choosen) {
-    let $executing = document.getElementById('executing');
-    $executing.style.transition = 'opacity 0.3s cubic-bezier(0,0,0.3,1)';
-    $executing.style.opacity = '1';
-    
-    let results = {};
-    
-    /** 
-     * ["insertionSort", "selectionSort", "heapSort"]
-     * ["10"]
-     * ["10000", "20000", "100000"]
-     */
-    let i = 0;
-    choosen.methods.forEach((method) => {
+      let results = e.data;
       
-      results[method] = {};
+      $status.textContent = "Plotando os gráficos";
+      setTimeout(() => {
+        $status.classList.remove('show');
+      }, 2000);
       
-      choosen.quantities.forEach((quantity) => {
-        let elements = null;
-        
-        results[method][quantity] = [];
-        
-        _loadFile(quantity, function(data) {
-          elements = data.split(/\n/g).map(parseFloat);
-        });
-        
-        choosen.times.forEach((time) => {
-          
-          console.log(++i, method, quantity, time);
-          
-          for (let i = 0; i < time; ++i) {
-            // console.log(elements);
-            
-            let sort = new Sort(),
-                fn = sort[method];
-            
-            let start = performance.now();
-            fn(elements.slice(0));
-            let end = performance.now();
-            
-            console.log(i+1, end-start);
-            results[method][quantity].push(end-start);
-            
-            // console.log(elements);
-          }
-          
-        });
-        
+      /** Plotting the chart */
+      let chartCtrl: ChartController = new ChartController();
+      let yValues = chartCtrl.fixValues(results);
+      console.log("Y", yValues);
+      
+      chartCtrl.plotChart({
+        x: choosen.quantities,
+        y: yValues,
+        id: 'chart',
+        title: 'Tempo médio de execução',
+        xaxis: {
+          title: 'Número de elementos'
+        },
+        yaxis: {
+          title: 'Tempo (ms)'
+        },
+        mode: 'scatter'
       });
       
-    });
-    
-    console.dir(results);
-    
-    /** Testing */
-    let chartCtrl: ChartController = new ChartController();
-    let yValues = chartCtrl.fixValues(results);
-    chartCtrl.plotChart(choosen.quantities, yValues);
-    /** Testing */
-    
-}
-  
-  function _loadFile(fileName, cb) {    
-    let xhr = (XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP"));
-    
-    xhr.open('GET', './assets/elements/'+fileName+'.txt', false);
-    xhr.onreadystatechange = function() {
-      if (xhr.readyState == 4 && xhr.status == 200) {
-        cb(xhr.responseText);
+      let $chartsNav = document.querySelector('#charts nav');
+      for (let method in results) {
+        let methodObj = {};
+        for (let i in methods) {
+          if (methods[i].value == method)
+            methodObj = methods[i];
+        }
+        
+        let $a = Template.chartNav({
+          method: method,
+          text: methodObj.text
+        });        
+        
+        $chartsNav.appendChild($a);
       }
-    };    
-    xhr.send();
-  }
-  
+      /** Plotting the chart */
+    }
+	}
+	
 });
 
 /**
  * ChartController
  */
 class ChartController {
-  constructor() {
+	constructor() {
+		
+	}
+	
+	plotChart(options) {
+		let x = options.x.map(parseFloat),
+        y = options.y;
+		console.log(x);
+		
+		let traces = [];
+		
+		for (let method in y) {
+			traces.push({
+				x: x,
+				y: y[method],
+				mode: options.mode, 
+				name: method
+			});
+		}
+		
+		var layout = {
+			title: options.title,
+			xaxis: {
+				range: x
+			},
+      yaxis: {}
+		};
     
-  }
-  
-  plotChart(x, values: Object) {
-    console.log(values);
-    
-    let traces = [];
-    
-    for (let method in values) {
-      traces.push({
-        x: x,
-        y: values[method],
-        mode: 'scatter', 
-        name: method
-      });
-    }
-    
-    var layout = {
-      title: 'Teste',
-      xaxis: {
-        range: x
-      }
-    }
-    
-    Plotly.newPlot('chart', traces, layout);
-  }
-  
-  fixValues(values: Object) {
-    let _values = {};
-    
-    for (let method in values) {
-      let objQuantities = values[method];
-      
-      _values[method] = [];
-      
-      for (let quantity in objQuantities) {
-        let arrayTimes = objQuantities[quantity];
-        
-        let avg = 0;
-        
-        for (let i = 0; i < arrayTimes.length; ++i) {
-          avg += arrayTimes[i];
-        }
-        
-        avg /= arrayTimes.length;
-        
-        _values[method].push(avg);
-      }
-    }
-    
-    return _values;
-  }
+    layout['xaxis']['title'] = options.xaxis.title || '';
+    layout['yaxis']['title'] = options.yaxis.title || '';
+		
+		Plotly.newPlot(options.id, traces, layout);
+	}
+	
+	fixValues(values: Object) {
+		let _values = {};
+		
+		for (let method in values) {
+			let objQuantities = values[method];
+			
+			_values[method] = [];
+			
+			for (let quantity in objQuantities) {
+				let arrayTimes = objQuantities[quantity];
+				
+				let avg = 0;
+				// let min = objQuantities[quantity][0];
+				
+				for (let i = 1; i < arrayTimes.length; ++i) {
+					// if (arrayTimes[i] < min) min = arrayTimes[i];
+					avg += arrayTimes[i];
+				}
+				
+				avg /= arrayTimes.length;
+				
+				_values[method].push(avg);
+				// _values[method].push(min);
+			}
+		}
+		
+		return _values;
+	}
 }

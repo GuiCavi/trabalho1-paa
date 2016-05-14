@@ -47,6 +47,7 @@ gulp.task('bs', function() {
 });
 
 gulp.task('build-ts', function() {
+  console.log('Building TS');
 	gulp.src('src/ts/*.ts')
 			.pipe(ts({
         target: 'es5',

@@ -1,26 +1,80 @@
 <!DOCTYPE html>
-<html lang="en"></html>
-<head>
-  <meta charset="UTF-8"/>
-  <title>Document</title>
-  <style>
-    #executing {
-      position: fixed;
-      bottom: 0;
-      right: 0;
-      opacity: 0;
-      pointer-events: none;
-    }
-  </style>
-</head>
-<body>
-  <ul id="methods"></ul>
-  <ul id="times"></ul>
-  <ul id="quantities"></ul>
-  <button id="calculate">Computar</button><span id="executing">Executando...</span>
-  <div id="chart" style="width: 600px; height: 500px;"></div>
-  <script src="./dist/js/plotly.min.js"></script>
-  <script src="./dist/js/sort.js"></script>
-  <script src="./dist/js/template.js"></script>
-  <script src="./dist/js/script.js"></script>
-</body>
+<html>
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="./dist/css/mdi.min.css"/>
+    <link rel="stylesheet" href="./dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="./dist/css/styles.css"/>
+    <title>Trabalho de PAA</title>
+  </head>
+  <body>
+    <div id="status" class="alert alert-danger bottom-right">Aguarde, estamos processando as entradas...</div>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-4 col-md-3">
+          <div class="card">
+            <header>
+              <h2>Passo 1</h2><small class="subtext">Escolha os métodos</small>
+            </header>
+            <section>
+              <ul id="methods" class="list"></ul>
+            </section>
+          </div>
+          <button id="calculate" class="btn">Calcular</button>
+        </div>
+        <div class="col-sm-4 col-md-3">   
+          <div class="card">
+            <header>
+              <h2>Passo 2</h2><small class="subtext">Escolha a quantidade de vezes</small>
+            </header>
+            <section>
+              <ul id="times" class="list"></ul>
+            </section>
+          </div>
+        </div>
+        <div class="col-sm-4 col-md-3"> 
+          <div class="card">
+            <header>
+              <h2>Passo 3</h2><small class="subtext">Escolha a quantidade de elementos</small>
+            </header>
+            <section>
+              <ul id="quantities" class="list"></ul>
+            </section>
+          </div>
+        </div>
+        <div class="col-sm-4 col-md-3">
+          <div class="card">
+            <header>
+              <h2>Passo 4</h2><small class="subtext">Escolha a característica dos elementos</small>
+            </header>
+            <section>
+              <ul id="charac" class="list"></ul>
+            </section>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="card">
+            <div id="charts" class="tabs">
+              <nav><a href="#chart1" class="active">Tempo médio</a></nav>
+              <section>
+                <div id="chart1" class="div active">
+                  <div id="chart" class="chart"></div>
+                </div>
+              </section>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="./dist/js/jquery.min.js"></script>
+    <script src="./dist/js/bootstrap.min.js"></script>
+    <script src="./dist/js/plotly.min.js"></script>
+    <script src="./dist/js/UI.js"></script>
+    <script src="./dist/js/sort.js"></script>
+    <script src="./dist/js/template.js"></script>
+    <script src="./dist/js/script.js"></script>
+  </body>
+</html>
