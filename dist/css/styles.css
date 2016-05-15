@@ -124,16 +124,17 @@ input[type=radio], input[type=checkbox] {
       border-bottom-color: #cd201f;
       font-weight: bold; }
 
-.tabs section > div {
-  display: none;
-  position: relative;
-  padding: 8px; }
-  .tabs section > div.active {
-    display: block; }
+.tabs section {
+  margin: 8px; }
+  .tabs section > div {
+    display: none;
+    position: relative; }
+    .tabs section > div.active {
+      display: block; }
 
 .chart {
-  width: 100%;
-  height: auto; }
+  width: 600px;
+  height: 600px; }
 
 .btn {
   letter-spacing: 0.5px;

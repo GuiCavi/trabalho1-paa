@@ -3,7 +3,8 @@ let Template = (function() {
   
   publicAPI = {
     methodInputGroup: _methodInputGroup,
-    chartNav: _chartNav
+    chartNav: _chartNav,
+    chartDiv: _chartDiv
   }
   
   return publicAPI;
@@ -38,6 +39,19 @@ let Template = (function() {
     $a.textContent = options.text;
     
     return $a;
+  }
+  
+  function _chartDiv(options) {        
+    let $div = document.createElement('div');
+    $div.id = options.id;
+    
+    let $chart = document.createElement('div');
+    $chart.id = options.chartId;
+    $chart.classList.add('chart');
+    
+    $div.appendChild($chart);
+    
+    return $div;
   }
 
 })();

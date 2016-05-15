@@ -9,6 +9,7 @@ onmessage = function (e) {
     };
     var results = exec(choosen);
     this.postMessage(results);
+    close();
 };
 function exec(choosen) {
     var k = 0;
@@ -17,20 +18,27 @@ function exec(choosen) {
         results[method] = {};
         choosen.quantities.forEach(function (quantity) {
             var elements = null;
-            results[method][quantity] = [];
+            results[method][quantity] = {};
             _loadFile(quantity, function (data) {
                 elements = data.split(/\n/g).map(parseFloat);
             });
             choosen.times.forEach(function (time) {
-                console.log(++k, method, quantity, time);
-                for (var i = 0; i < time; ++i) {
-                    var sort = new Sort(), fn = sort[method], copy = elements.slice(0);
-                    var start = performance.now();
-                    fn(copy);
-                    var end = performance.now();
-                    console.log(i + 1, end - start);
-                    results[method][quantity].push(end - start);
-                }
+                choosen.charac.forEach(function (charac) {
+                    results[method][quantity][charac] = [];
+                    console.log(++k, method, quantity, time, charac);
+                    for (var i = 0; i < time; ++i) {
+                        var sort = new Sort(), fn = sort[method], copy = charac == 'random' ?
+                            elements.slice(0) :
+                            (charac == 'ascending' ?
+                                elements.slice(0).sort() :
+                                elements.slice(0).sort().reverse());
+                        var start = performance.now();
+                        fn(copy);
+                        var end = performance.now();
+                        console.log(i + 1, end - start);
+                        results[method][quantity][charac].push(end - start);
+                    }
+                });
             });
         });
     });

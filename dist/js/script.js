@@ -75,7 +75,6 @@ window.addEventListener('load', function () {
     initInputs();
     new ChartController().plotChart({
         x: quantities.map(parseFloat),
-        y: [],
         id: 'chart',
         title: 'Tempo médio de execução',
         xaxis: {
@@ -204,6 +203,7 @@ window.addEventListener('load', function () {
     function executeFunctions(choosen) {
         var $status = document.getElementById('status');
         var results = {};
+        $status.textContent = 'Aguarde, estamos processando as entradas...';
         $status.classList.add('show');
         /**
          * ["insertionSort", "selectionSort", "heapSort"]
@@ -236,7 +236,15 @@ window.addEventListener('load', function () {
                 },
                 mode: 'scatter'
             });
-            var $chartsNav = document.querySelector('#charts nav');
+            var $chartsNav = document.querySelector('#charts nav'), $chartsSection = document.querySelector('#charts section');
+            Array.from($chartsNav.querySelectorAll('a:not(:first-child)')).forEach(function (el) {
+                el.remove && el.remove();
+            });
+            Array.from($chartsSection.querySelectorAll(':scope > div:not(:first-child)')).forEach(function (el) {
+                el.remove && el.remove();
+            });
+            $chartsNav.querySelector('a:first-child').classList.add('active');
+            $chartsSection.querySelector(':scope > div:first-child').classList.add('active');
             for (var method in results) {
                 var methodObj = {};
                 for (var i in methods) {
@@ -248,6 +256,24 @@ window.addEventListener('load', function () {
                     text: methodObj.text
                 });
                 $chartsNav.appendChild($a);
+                var $div = Template.chartDiv({
+                    id: method,
+                    chartId: method + 'Chart'
+                });
+                $chartsSection.appendChild($div);
+                chartCtrl.plotEachChart({
+                    x: choosen.quantities,
+                    y: yValues[method],
+                    id: method + 'Chart',
+                    title: 'Tempo médio de execução',
+                    xaxis: {
+                        title: 'Número de elementos'
+                    },
+                    yaxis: {
+                        title: 'Tempo (ms)'
+                    },
+                    mode: 'scatter'
+                });
             }
             /** Plotting the chart */
         };
@@ -260,15 +286,38 @@ var ChartController = (function () {
     function ChartController() {
     }
     ChartController.prototype.plotChart = function (options) {
-        var x = options.x.map(parseFloat), y = options.y;
-        console.log(x);
+        var x = options.x || [1, 2, 3], y = options.y || [];
+        console.log("TESTE", x, y, options);
         var traces = [];
         for (var method in y) {
             traces.push({
                 x: x,
-                y: y[method],
+                y: y[method].random,
                 mode: options.mode,
                 name: method
+            });
+        }
+        var layout = {
+            title: options.title,
+            xaxis: {
+                range: x
+            },
+            yaxis: {}
+        };
+        layout['xaxis']['title'] = options.xaxis.title || '';
+        layout['yaxis']['title'] = options.yaxis.title || '';
+        Plotly.newPlot(options.id, traces, layout);
+    };
+    ChartController.prototype.plotEachChart = function (options) {
+        var x = options.x || [1, 2, 3], y = options.y || [];
+        console.log("TESTE", x, y, options);
+        var traces = [];
+        for (var charac_1 in y) {
+            traces.push({
+                x: x,
+                y: y[charac_1],
+                mode: options.mode,
+                name: charac_1
             });
         }
         var layout = {
@@ -286,17 +335,18 @@ var ChartController = (function () {
         var _values = {};
         for (var method in values) {
             var objQuantities = values[method];
-            _values[method] = [];
+            _values[method] = {};
             for (var quantity in objQuantities) {
-                var arrayTimes = objQuantities[quantity];
-                var avg = 0;
-                // let min = objQuantities[quantity][0];
-                for (var i = 1; i < arrayTimes.length; ++i) {
-                    // if (arrayTimes[i] < min) min = arrayTimes[i];
-                    avg += arrayTimes[i];
+                var timesObj = objQuantities[quantity];
+                for (var charac_2 in timesObj) {
+                    _values[method][charac_2] = _values[method][charac_2] || [];
+                    var avg = 0;
+                    for (var i = 0, len = timesObj[charac_2].length; i < len; ++i) {
+                        avg += timesObj[charac_2][i];
+                    }
+                    avg /= timesObj[charac_2].length;
+                    _values[method][charac_2].push(avg);
                 }
-                avg /= arrayTimes.length;
-                _values[method].push(avg);
             }
         }
         return _values;

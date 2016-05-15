@@ -13,6 +13,7 @@ onmessage = function(e) {
   let results = exec(choosen);
   
   this.postMessage(results);
+  close();
 }
 
 function exec(choosen) {
@@ -27,7 +28,7 @@ function exec(choosen) {
     choosen.quantities.forEach((quantity) => {
       let elements = null;
       
-      results[method][quantity] = [];
+      results[method][quantity] = {};
       
       _loadFile(quantity, function(data) {
         elements = data.split(/\n/g).map(parseFloat);
@@ -35,20 +36,31 @@ function exec(choosen) {
       
       choosen.times.forEach((time) => {
         
-        console.log(++k, method, quantity, time);
+        choosen.charac.forEach((charac) => {
+          results[method][quantity][charac] = [];
+          console.log(++k, method, quantity, time, charac);
         
-        for (let i = 0; i < time; ++i) {
-          let sort = new Sort(),
-              fn = sort[method],
-              copy = elements.slice(0);
-          
-          let start = performance.now();
-          fn(copy);
-          let end = performance.now();
-          
-          console.log(i+1, end-start);
-          results[method][quantity].push(end-start);
-        }
+          for (let i = 0; i < time; ++i) {
+            let sort = new Sort(),
+                fn = sort[method],
+                copy =
+                  charac == 'random' ?
+                    elements.slice(0):
+                    (
+                      charac == 'ascending' ?
+                        elements.slice(0).sort() :
+                        elements.slice(0).sort().reverse()
+                    )
+                     
+            
+            let start = performance.now();
+            fn(copy);
+            let end = performance.now();
+            
+            console.log(i+1, end-start);
+            results[method][quantity][charac].push(end-start);
+          }
+        });
         
       });
       
