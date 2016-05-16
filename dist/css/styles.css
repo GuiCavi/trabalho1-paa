@@ -124,13 +124,14 @@ input[type=radio], input[type=checkbox] {
       border-bottom-color: #cd201f;
       font-weight: bold; }
 
-.tabs section {
-  margin: 8px; }
-  .tabs section > div {
-    display: none;
-    position: relative; }
-    .tabs section > div.active {
-      display: block; }
+.tabs section > div {
+  padding: 8px;
+  display: none;
+  position: relative; }
+  .tabs section > div.active {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex; }
 
 .chart {
   width: 600px;
@@ -208,3 +209,29 @@ input[type=radio], input[type=checkbox] {
     opacity: 0;
     -webkit-transform: translateY(100%);
             transform: translateY(100%); } }
+
+#debug {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  min-width: 200px;
+  min-height: 200px;
+  max-height: 100vh;
+  background-color: #333;
+  max-height: 100vh;
+  color: #fff;
+  overflow: auto;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease; }
+  #debug.opened {
+    opacity: 1;
+    pointer-events: auto; }
+  #debug pre {
+    background-color: #333;
+    border: none;
+    border-top: 1px solid #222;
+    color: #fff; }
+  #debug i.mdi {
+    margin: 5px;
+    cursor: pointer; }

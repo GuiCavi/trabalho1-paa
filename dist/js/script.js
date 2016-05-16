@@ -1,4 +1,5 @@
 'use strict';
+var debug;
 var methods = [
     {
         id: 'bubble-sort-1',
@@ -72,19 +73,9 @@ var charac = [
     }
 ];
 window.addEventListener('load', function () {
+    debug = new Debug();
     initInputs();
-    new ChartController().plotChart({
-        x: quantities.map(parseFloat),
-        id: 'chart',
-        title: 'Tempo médio de execução',
-        xaxis: {
-            title: 'Número de elementos'
-        },
-        yaxis: {
-            title: 'Tempo (ms)'
-        },
-        mode: 'scatter'
-    });
+    initCharts();
     var $calculate = document.getElementById('calculate');
     $calculate.addEventListener('click', function (e) {
         e.preventDefault();
@@ -199,6 +190,104 @@ window.addEventListener('load', function () {
         }
     }
     ;
+    function initCharts() {
+        /** Initial state for random entries */
+        new ChartController().plotChart({
+            x: quantities.map(parseFloat),
+            id: 'timeForRandom',
+            title: 'Tempo médio de execução',
+            mode: 'scatter',
+            layout: {
+                xaxis: {
+                    title: 'Número de elementos'
+                },
+                yaxis: {
+                    title: 'Tempo (ms)'
+                }
+            }
+        });
+        new ChartController().plotChart({
+            x: quantities.map(parseFloat),
+            y: [],
+            id: 'swapForRandom',
+            title: 'Número de trocas no tempo médio',
+            type: 'bar',
+            layout: {
+                xaxis: {
+                    title: 'Número de elementos'
+                },
+                yaxis: {
+                    title: 'Número de trocas'
+                }
+            }
+        });
+        /** Initial state for random entries */
+        /** Initial state for ascending entries */
+        new ChartController().plotChart({
+            x: quantities.map(parseFloat),
+            y: [],
+            id: 'timeForAscending',
+            title: 'Número de trocas no tempo médio',
+            type: 'bar',
+            layout: {
+                xaxis: {
+                    title: 'Número de elementos'
+                },
+                yaxis: {
+                    title: 'Tempo (ms)'
+                }
+            }
+        });
+        new ChartController().plotChart({
+            x: quantities.map(parseFloat),
+            y: [],
+            id: 'swapForAscending',
+            title: 'Número de trocas no tempo médio',
+            type: 'bar',
+            layout: {
+                xaxis: {
+                    title: 'Número de elementos'
+                },
+                yaxis: {
+                    title: 'Número de trocas'
+                }
+            }
+        });
+        /** Initial state for ascending entries */
+        /** Initial state for descending entries */
+        new ChartController().plotChart({
+            x: quantities.map(parseFloat),
+            y: [],
+            id: 'timeForDescending',
+            title: 'Número de trocas no tempo médio',
+            type: 'bar',
+            layout: {
+                xaxis: {
+                    title: 'Número de elementos'
+                },
+                yaxis: {
+                    title: 'Tempo (ms)'
+                }
+            }
+        });
+        new ChartController().plotChart({
+            x: quantities.map(parseFloat),
+            y: [],
+            id: 'swapForDescending',
+            title: 'Número de trocas no tempo médio',
+            type: 'bar',
+            layout: {
+                xaxis: {
+                    title: 'Número de elementos'
+                },
+                yaxis: {
+                    title: 'Número de trocas'
+                }
+            }
+        });
+        /** Initial state for descending entries */
+    }
+    ;
     /** Execute the choosen methods N times for the number of inputs */
     function executeFunctions(choosen) {
         var $status = document.getElementById('status');
@@ -214,37 +303,68 @@ window.addEventListener('load', function () {
         worker.postMessage([choosen.methods, choosen.quantities, choosen.times, choosen.charac]);
         worker.onmessage = function (e) {
             console.log('onmessage do worker', e.data);
-            var results = e.data;
+            var results = e.data['0'];
+            var swaps = e.data['1'];
             $status.textContent = "Plotando os gráficos";
             setTimeout(function () {
                 $status.classList.remove('show');
             }, 2000);
             /** Plotting the chart */
             var chartCtrl = new ChartController();
-            var yValues = chartCtrl.fixValues(results);
-            console.log("Y", yValues);
-            chartCtrl.plotChart({
-                x: choosen.quantities,
-                y: yValues,
-                id: 'chart',
-                title: 'Tempo médio de execução',
-                xaxis: {
-                    title: 'Número de elementos'
-                },
-                yaxis: {
-                    title: 'Tempo (ms)'
-                },
-                mode: 'scatter'
-            });
+            var yValues = chartCtrl.fixValues(results, average);
+            var swapValues = chartCtrl.fixValues(swaps, numOfSwaps);
+            console.log("Y", yValues, swapValues);
+            for (var i = 0, len = choosen.charac.length; i < len; ++i) {
+                /** Plotting charts random entries */
+                chartCtrl.plotChart({
+                    x: choosen.quantities,
+                    y: yValues,
+                    id: 'timeFor' + (choosen.charac[i].charAt(0).toUpperCase() + choosen.charac[i].substr(1)),
+                    which: choosen.charac[i],
+                    title: 'Tempo médio de execução',
+                    mode: 'scatter',
+                    layout: {
+                        xaxis: {
+                            title: 'Número de elementos',
+                            tickmode: 'array',
+                            autotick: false,
+                            type: 'category'
+                        },
+                        yaxis: {
+                            title: 'Tempo (ms)'
+                        }
+                    }
+                });
+                chartCtrl.plotChart({
+                    x: choosen.quantities,
+                    y: swapValues,
+                    id: 'swapFor' + (choosen.charac[i].charAt(0).toUpperCase() + choosen.charac[i].substr(1)),
+                    which: choosen.charac[i],
+                    title: 'Número de trocas no tempo médio',
+                    type: 'bar',
+                    layout: {
+                        xaxis: {
+                            title: 'Número de elementos',
+                            tickmode: 'array',
+                            autotick: false,
+                            type: 'category'
+                        },
+                        yaxis: {
+                            title: 'Número de trocas'
+                        },
+                        barmode: 'stack'
+                    }
+                });
+            }
             var $chartsNav = document.querySelector('#charts nav'), $chartsSection = document.querySelector('#charts section');
-            Array.from($chartsNav.querySelectorAll('a:not(:first-child)')).forEach(function (el) {
+            Array.from($chartsNav.querySelectorAll('a:not(.nr)')).forEach(function (el) {
                 el.remove && el.remove();
             });
-            Array.from($chartsSection.querySelectorAll(':scope > div:not(:first-child)')).forEach(function (el) {
+            Array.from($chartsSection.querySelectorAll(':scope > div:not(.nr)')).forEach(function (el) {
                 el.remove && el.remove();
             });
-            $chartsNav.querySelector('a:first-child').classList.add('active');
-            $chartsSection.querySelector(':scope > div:first-child').classList.add('active');
+            $chartsNav.querySelector('a.nr:first-child').classList.add('active');
+            $chartsSection.querySelector(':scope > div.nr:first-child').classList.add('active');
             for (var method in results) {
                 var methodObj = {};
                 for (var i in methods) {
@@ -264,19 +384,56 @@ window.addEventListener('load', function () {
                 chartCtrl.plotEachChart({
                     x: choosen.quantities,
                     y: yValues[method],
-                    id: method + 'Chart',
-                    title: 'Tempo médio de execução',
-                    xaxis: {
-                        title: 'Número de elementos'
-                    },
-                    yaxis: {
-                        title: 'Tempo (ms)'
-                    },
-                    mode: 'scatter'
+                    // id: method+'Chart',
+                    id: 'timeFor' + method + 'Chart',
+                    mode: 'scatter',
+                    layout: {
+                        title: 'Comportamento para diferentes entradas (' + methodObj.text + ')',
+                        xaxis: {
+                            title: 'Número de elementos',
+                            tickmode: 'array',
+                            autotick: false,
+                            type: 'category'
+                        },
+                        yaxis: {
+                            title: 'Número de trocas'
+                        },
+                    }
+                });
+                chartCtrl.plotEachChart({
+                    x: choosen.quantities,
+                    y: swapValues[method],
+                    id: 'swapFor' + method + 'Chart',
+                    title: 'Número de trocas no tempo médio',
+                    type: 'bar',
+                    layout: {
+                        xaxis: {
+                            title: 'Número de elementos',
+                            tickmode: 'array',
+                            autotick: false,
+                            type: 'category'
+                        },
+                        yaxis: {
+                            title: 'Número de trocas'
+                        },
+                        barmode: 'stack'
+                    }
                 });
             }
             /** Plotting the chart */
         };
+    }
+    function average(arr) {
+        var avg = 0, _values = [];
+        for (var i = 0, len = arr.length; i < len; ++i) {
+            avg += arr[i];
+        }
+        avg /= arr.length;
+        _values.push(avg);
+        return _values;
+    }
+    function numOfSwaps(arr) {
+        return arr[0];
     }
 });
 /**
@@ -286,26 +443,21 @@ var ChartController = (function () {
     function ChartController() {
     }
     ChartController.prototype.plotChart = function (options) {
-        var x = options.x || [1, 2, 3], y = options.y || [];
+        var x = options.x || [1, 2, 3];
+        var y = options.y || [];
         console.log("TESTE", x, y, options);
         var traces = [];
         for (var method in y) {
             traces.push({
                 x: x,
-                y: y[method].random,
-                mode: options.mode,
+                y: y[method][options.which],
                 name: method
             });
+            options.mode && (traces[traces.length - 1]['mode'] = options.mode);
+            options.type && (traces[traces.length - 1]['type'] = options.type);
         }
-        var layout = {
-            title: options.title,
-            xaxis: {
-                range: x
-            },
-            yaxis: {}
-        };
-        layout['xaxis']['title'] = options.xaxis.title || '';
-        layout['yaxis']['title'] = options.yaxis.title || '';
+        debug.p(traces);
+        var layout = options.layout;
         Plotly.newPlot(options.id, traces, layout);
     };
     ChartController.prototype.plotEachChart = function (options) {
@@ -316,22 +468,15 @@ var ChartController = (function () {
             traces.push({
                 x: x,
                 y: y[charac_1],
-                mode: options.mode,
                 name: charac_1
             });
+            options.mode && (traces[traces.length - 1]['mode'] = options.mode);
+            options.type && (traces[traces.length - 1]['type'] = options.type);
         }
-        var layout = {
-            title: options.title,
-            xaxis: {
-                range: x
-            },
-            yaxis: {}
-        };
-        layout['xaxis']['title'] = options.xaxis.title || '';
-        layout['yaxis']['title'] = options.yaxis.title || '';
+        var layout = options.layout;
         Plotly.newPlot(options.id, traces, layout);
     };
-    ChartController.prototype.fixValues = function (values) {
+    ChartController.prototype.fixValues = function (values, cb) {
         var _values = {};
         for (var method in values) {
             var objQuantities = values[method];
@@ -340,16 +485,38 @@ var ChartController = (function () {
                 var timesObj = objQuantities[quantity];
                 for (var charac_2 in timesObj) {
                     _values[method][charac_2] = _values[method][charac_2] || [];
-                    var avg = 0;
-                    for (var i = 0, len = timesObj[charac_2].length; i < len; ++i) {
-                        avg += timesObj[charac_2][i];
-                    }
-                    avg /= timesObj[charac_2].length;
-                    _values[method][charac_2].push(avg);
+                    _values[method][charac_2] = _values[method][charac_2].concat(cb(timesObj[charac_2]));
                 }
             }
         }
         return _values;
     };
     return ChartController;
+}());
+var Debug = (function () {
+    function Debug() {
+        this.area = document.getElementById('debug');
+        this.codeArea = this.area.querySelector('pre');
+        this.closeButton = this.area.querySelector('i.mdi');
+        this.closeArea = this.closeArea.bind(this);
+        this.openArea = this.openArea.bind(this);
+        this.addEventListeners();
+    }
+    ;
+    Debug.prototype.addEventListeners = function () {
+        this.closeButton.addEventListener('click', this.closeArea);
+    };
+    Debug.prototype.closeArea = function () {
+        this.area.classList.remove('opened');
+    };
+    Debug.prototype.openArea = function () {
+        this.area.classList.add('opened');
+    };
+    Debug.prototype.e = function () { };
+    Debug.prototype.i = function () { };
+    Debug.prototype.p = function (str) {
+        this.openArea();
+        this.codeArea.textContent = JSON.stringify(str, null, 2);
+    };
+    return Debug;
 }());

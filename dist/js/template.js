@@ -33,10 +33,14 @@ var Template = (function () {
     function _chartDiv(options) {
         var $div = document.createElement('div');
         $div.id = options.id;
-        var $chart = document.createElement('div');
-        $chart.id = options.chartId;
-        $chart.classList.add('chart');
-        $div.appendChild($chart);
+        var $timeChart = document.createElement('div');
+        $timeChart.id = 'timeFor' + options.chartId;
+        $timeChart.classList.add('chart');
+        var $swapChart = document.createElement('div');
+        $swapChart.id = 'swapFor' + options.chartId;
+        $swapChart.classList.add('chart');
+        $div.appendChild($timeChart);
+        $div.appendChild($swapChart);
         return $div;
     }
 })();

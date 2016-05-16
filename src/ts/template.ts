@@ -45,11 +45,16 @@ let Template = (function() {
     let $div = document.createElement('div');
     $div.id = options.id;
     
-    let $chart = document.createElement('div');
-    $chart.id = options.chartId;
-    $chart.classList.add('chart');
+    let $timeChart = document.createElement('div');
+    $timeChart.id = 'timeFor'+options.chartId;
+    $timeChart.classList.add('chart');
     
-    $div.appendChild($chart);
+    let $swapChart = document.createElement('div');
+    $swapChart.id = 'swapFor'+options.chartId;
+    $swapChart.classList.add('chart');
+    
+    $div.appendChild($timeChart);
+    $div.appendChild($swapChart);
     
     return $div;
   }

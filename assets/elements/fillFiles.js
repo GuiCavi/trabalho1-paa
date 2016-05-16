@@ -27,6 +27,7 @@ fs.readdir('./', function(err, files) {
   }
   
   for (var i in numbers) {
-    fs.writeFile(i + '.txt', numbers[i].toString().replace(/,/g, '\n'));
+    // fs.writeFile(i + '.txt', numbers[i].toString().replace(/,/g, '\n'));
+    fs.writeFile(i + '.txt', numbers[i].toString());
   }
 });

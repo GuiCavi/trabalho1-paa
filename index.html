@@ -58,16 +58,28 @@
         <div class="col-xs-12">
           <div class="card">
             <div id="charts" class="tabs">
-              <nav><a href="#chart1" class="active">Tempo médio</a></nav>
+              <nav><a href="#chart1" class="active nr">Entradas aleatórias</a><a href="#chart2" class="nr">Entradas crescentes</a><a href="#chart3" class="nr">Entradas decrescentes</a></nav>
               <section>
-                <div id="chart1" class="active">
-                  <div id="chart" class="chart"></div>
+                <div id="chart1" class="active nr">
+                  <div id="timeForRandom" class="chart"></div>
+                  <div id="swapForRandom" class="chart"></div>
+                </div>
+                <div id="chart2" class="nr">
+                  <div id="timeForAscending" class="chart"></div>
+                  <div id="swapForAscending" class="chart"></div>
+                </div>
+                <div id="chart3" class="nr">
+                  <div id="timeForDescending" class="chart"></div>
+                  <div id="swapForDescending" class="chart"></div>
                 </div>
               </section>
             </div>
           </div>
         </div>
       </div>
+    </div>
+    <div id="debug"><i class="mdi mdi-close"></i>
+      <pre></pre>
     </div>
     <script src="./dist/js/jquery.min.js"></script>
     <script src="./dist/js/bootstrap.min.js"></script>

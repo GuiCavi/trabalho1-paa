@@ -10,9 +10,11 @@ onmessage = function(e) {
     charac: e.data[3]
   }
   
-  let results = exec(choosen);
+  let results, swaps;
   
-  this.postMessage(results);
+  [results, swaps] = exec(choosen);
+  
+  this.postMessage([results, swaps]);
   close();
 }
 
@@ -20,24 +22,28 @@ function exec(choosen) {
 
   let k = 0;
   let results = {};
+  let swaps = {};
   
   choosen.methods.forEach((method) => {
     
     results[method] = {};
+    swaps[method] = {};
     
     choosen.quantities.forEach((quantity) => {
       let elements = null;
       
       results[method][quantity] = {};
+      swaps[method][quantity] = {};
       
       _loadFile(quantity, function(data) {
-        elements = data.split(/\n/g).map(parseFloat);
+        elements = data.split(/,/g).map(parseFloat);
       });
       
       choosen.times.forEach((time) => {
         
         choosen.charac.forEach((charac) => {
           results[method][quantity][charac] = [];
+          swaps[method][quantity][charac] = [];
           console.log(++k, method, quantity, time, charac);
         
           for (let i = 0; i < time; ++i) {
@@ -48,17 +54,18 @@ function exec(choosen) {
                     elements.slice(0):
                     (
                       charac == 'ascending' ?
-                        elements.slice(0).sort() :
-                        elements.slice(0).sort().reverse()
+                        elements.slice(0).sort(_ascending) :
+                        elements.slice(0).sort(_ascending).reverse()
                     )
                      
             
             let start = performance.now();
-            fn(copy);
+            let _swaps = fn(copy);
             let end = performance.now();
             
-            console.log(i+1, end-start);
+            console.log(i+1, end-start, swaps);
             results[method][quantity][charac].push(end-start);
+            swaps[method][quantity][charac].push(_swaps);
           }
         });
         
@@ -67,9 +74,13 @@ function exec(choosen) {
     });
   });
   
-  return results;
+  return [results, swaps];
   
 };
+
+function _ascending(a, b) {
+  return a - b;
+}
 
 function _loadFile(fileName, cb) {    
   let xhr = (XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP"));

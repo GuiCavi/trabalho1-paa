@@ -1,7 +1,16 @@
 .card
   .tabs#charts
     nav
-      a(href="#chart1").active Tempo médio
+      a(href="#chart1").active.nr Entradas aleatórias
+      a(href="#chart2").nr Entradas crescentes
+      a(href="#chart3").nr Entradas decrescentes
     section
-      #chart1.active
-        .chart#chart
+      #chart1.active.nr
+        .chart#timeForRandom
+        .chart#swapForRandom
+      #chart2.nr
+        .chart#timeForAscending
+        .chart#swapForAscending
+      #chart3.nr
+        .chart#timeForDescending
+        .chart#swapForDescending
