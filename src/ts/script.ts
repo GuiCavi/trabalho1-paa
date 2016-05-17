@@ -448,7 +448,7 @@ window.addEventListener('load', () => {
               type: 'category'
             },
             yaxis: {
-              title: 'Número de trocas'
+              title: 'Tempo(ms)'
             },
           }
         });
