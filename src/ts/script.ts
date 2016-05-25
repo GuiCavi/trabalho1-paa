@@ -56,7 +56,7 @@ let quantities = [
 	'1000000'
 ];
 
-let times = [ 10, 20, 30, 40 ];
+let times = [ 1, 10, 20, 30, 40 ];
 
 let charac = [
   { 

@@ -53,7 +53,7 @@ var quantities = [
     '500000',
     '1000000'
 ];
-var times = [10, 20, 30, 40];
+var times = [1, 10, 20, 30, 40];
 var charac = [
     {
         id: 'ascending',

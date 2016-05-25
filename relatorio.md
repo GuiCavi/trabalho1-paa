@@ -19,8 +19,11 @@ O JS é uma linguagem de programação interpretada (diferente do HTML, que é u
 
 Em 2012, a Microsoft anunciou o desenvolvimento de um *transcompiler* (converte código escrito em uma linguagem para outra) chamado *TypeScript*, e no início de 2016 finalmente fez o lançamento oficial. Essa nova linguagem permite o uso de orientação a objetos previsto pelo ECMAScript 6, bem como a tipagem dos dados, daí seu nome.
 
+
+
 No capítulo 2 serão apresentados os objetivos deste trabalho, no capítulo 3 estarão os algoritmos implementados nesse trabalho, bem como seus respectivos códigos. No capítulo 4 são apresentados os resultados obtidos. 
 
+.... continuar
 
 ### 2. Objetivos
 
@@ -385,36 +388,36 @@ Apesar de existirem valores maiores, foram executados testes apenas até cem mil
 As execuções do BubbleSort mostraram que, independente das entradas serem crescentes ou decrescentes (melhor e pior caso), seu tempo de execução será alto.
 Para entradas crescentes, sua execução é muito mais rápida que para entradas aleatórias, já que o tempo de realizar uma troca não existe, como podemos ver no gráfico da Figura 3.
 
-![Gráfico de tempos para o BubbleSort](docs/bubbleSort-final.png)
+![Gráfico de tempos para o BubbleSort](docs/bubbleSort-final.png){width=300px}
 
 Fica fácil de notar isso quando olhamos para o gráfico do número de trocas (Figura 4).
 Para entradas crescentes, não existem trocas, enquanto que para entradas decrescentes são feitas, aproximadamente 5 bilhões de trocas (100 mil elementos).
 Mesmo não existindo trocas para entradas crescentes, seu tempo ainda é computado como `n²`, já que a condição para a troca é executada `n` vezes. 
 
-![Gráfico de trocas do BubbleSort](docs/bubbleSort-swaps-final.png)
+![Gráfico de trocas do BubbleSort](docs/bubbleSort-swaps-final.png){width=300px}
 
 #### 4.3 Executando o BubbleSort Melhorado
 
 A diferença para esse algoritmo fica só pelo gráfico de tempo, em que a execução dos elementos crescentes se torna `n`.
 Um detalhe que vale ressaltar é que, o número de trocas é o mesmo, mas o tempo de execução deste algoritmo é um pouco maior. Isso acontece pois existe a verificação de uma variável a mais e isso tem um custo. (Figura 5)
 
-![Gráfico de tempos para o BubbleSort Melhorado](docs/bubbleSortMelhorado-final.png)
+![Gráfico de tempos para o BubbleSort Melhorado](docs/bubbleSortMelhorado-final.png){width=300px}
 
 Apesar de parecer uma reta, o resultado para as entradas crescentes é representado na Figura 6.
 Note que o tempo para 10 mil é maior que o para 20 mil: Isso ocorre dadas as condições computacionais das execuções.
 
-![Gráfico dos tempos para entradas crescentes do BubbleSort Melhorado](docs/bubbleSortMelhorado-final2.png)
+![Gráfico dos tempos para entradas crescentes do BubbleSort Melhorado](docs/bubbleSortMelhorado-final2.png){width=300px}
 
 #### 4.4 Executando o InsertionSort
 
 Os resultados obtidos com esse algoritmo são muito semelhantes ao BubbleSort Melhorado, o que já era previsto dado que suas complexidades são iguais.
 Repare que os gráficos são iguais, porém os tempos possuem uma diferença considerável: o Bubble com entradas decrescentes demora 200 mil milisegundos, enquanto o Insertion para a mesma entrada, demora 16 mil milisegundos.
 
-![Gráfico de tempos para o InsertionSort](docs/insertionSort-final.png)
+![Gráfico de tempos para o InsertionSort](docs/insertionSort-final.png){width=300px}
 
 O número de trocas é o mesmo do BubbleSort melhorado, veja na Figura 8:
 
-![Gráfico de trocas do InsertionSort](docs/insertionSort-swaps-final.png)
+![Gráfico de trocas do InsertionSort](docs/insertionSort-swaps-final.png){width=300px}
 
 #### 4.5 Executando o ShellSort
 
@@ -422,44 +425,44 @@ Os testes feitos sobre o ShellSort resultaram em gráficos interessantes.
 Repare que para entradas pequenas, o melhor caso tende a diminuir com o tempo, porém depois ele cresce normalmente (a partir de 20 mil).
 Já as outras entradas tem um comportamento esperado. (Figura 9)
 
-![Gráfico de tempos para o ShellShort](docs/shellSort-final.png)
+![Gráfico de tempos para o ShellShort](docs/shellSort-final.png){width=300px}
 
 O número de trocas é bem menor quando comparado com os BubbleSorts. No entanto, para entradas decrescentes, são feitas menos trocas que para entradas aleatórias. (Figura 10)
 
-![Gráfico de trocas do ShellShort](docs/shellSort-swaps-final.png)
+![Gráfico de trocas do ShellShort](docs/shellSort-swaps-final.png){width=300px}
 
 #### 4.6 Executando o SelectionSort
 
 Para esse algoritmo, os gráficos são muito próximos para pequenas quantidades (todos os casos), porém, quando o número de elementos cresce, passa a ser mais evidente que o melhor caso é mais rápido e o pior caso é mais lento.
 Nota-se também o comportamento `n²` apresentado anteriormente na seção 3.3. (Figura 11)
 
-![Gráfico de tempos para o SelectionSort](docs/selectionSort-final.png)
+![Gráfico de tempos para o SelectionSort](docs/selectionSort-final.png){width=300px}
 
 A quantidade de trocas está representado na Figura 12
 
-![Gráfico de trocas para o SelectionSort](docs/selectionSort--swaps-final.png)
+![Gráfico de trocas para o SelectionSort](docs/selectionSort--swaps-final.png){width=300px}
 
 #### 4.7 Executando o HeapSort
 
 Esse algoritmo apresenta um comportamento muito semelhante para todos os casos. Note que para entradas pequenas, os tempos são muito parecidos, enquanto que para entradas grandes (100 mil elementos), os tempos começam a ficar maiores para entradas aleatórias.
 Note também que o tempo de execução é baixo, na casa dos 140 milisegundos. (Figura 13)
 
-![Gráfico de tempos para o HeapSort](docs/heapSort-final.png)
+![Gráfico de tempos para o HeapSort](docs/heapSort-final.png){width=300px}
 
 O número de trocas também é alto mas isso não influenciou no tempo de execução. (Figura 14)
 
-![Gráfico de trocas para o HeapSort](docs/heapSort-swaps-final.png)
+![Gráfico de trocas para o HeapSort](docs/heapSort-swaps-final.png){width=300px}
 
 #### 4.8 Executando o MergeSort
 
 Para todos os casos, os tempos do MergeSort se aproximaram muito, e é evidente pela Figura 15 que entradas aleatórias tomam mais tempo.
 Porém, esse algoritmo não é tão estável: outros testes feitos, apresentaram diferentes resultados, com a maioria muito semelhante ao apresentado na Figura 15. 
 
-![Gráfico de tempos para o MergeSort](docs/mergeSort-final.png)
+![Gráfico de tempos para o MergeSort](docs/mergeSort-final.png){width=300px}
 
 A quantidade de trocas está representado na Figura 16
 
-![Gráfico de trocas para o MergeSort](docs/mergeSort-swaps-final.png)
+![Gráfico de trocas para o MergeSort](docs/mergeSort-swaps-final.png){width=300px}
 
 #### 4.9 Executando o QuickSort
 
@@ -467,9 +470,9 @@ Esse algoritmo trouxe alguns resultados que não agradaram: para entradas cresce
 Então, apenas resultados para entradas aleatórias serão apresentados.
 O QuickSort se mostrou muito eficiente realizando a ordenação de 100 mil elementos em apenas 32 milisegundos (Figura 17), mesmo fazendo 492 mil trocas aproximadamente (Figura 18).
 
-![Gráfico de tempos para o QuickSort](docs/quickSort-final.png)
+![Gráfico de tempos para o QuickSort](docs/quickSort-final.png){width=300px}
 
-![Gráfico de trocas para o QuickSort](docs/quickSort-swaps-final.png)
+![Gráfico de trocas para o QuickSort](docs/quickSort-swaps-final.png){width=300px}
 
 ### 5. Resultados agregados
 
@@ -481,21 +484,21 @@ Na Figura 19, podemos notar que o BubbleSort Melhorado, apesar de ser otimizado"
 Isso porque esse algoritmo tem uma comparação a mais, conforme explicado acima.
 Também é possível ver que o SelectionSort é o terceiro mais lento, seguido do InsertionSort.
 
-![Comparação de entradas aleatórias](docs/randomAll-final.png)
+![Comparação de entradas aleatórias](docs/randomAll-final.png){width=300px}
 
 Comparando trocas (Figura 20), temos que os algoritmos que apresentam as maiores quantidades são o InsertionSort e os BubbleSorts.
 
-![Comparação entre as trocas para entradas aleatórias](docs/randomAll-swaps-final.png)
+![Comparação entre as trocas para entradas aleatórias](docs/randomAll-swaps-final.png){width=300px}
 
 ---
 
 Os 3 algoritmos mais rápidos são o HeapSort, o MergeSort e o ShellSort como o mais rápido para entradas aleatórias (Figura 21).
 
-![Comparação entre os algoritmos mais rápidos (tempo)](docs/randomFast-final.png)
+![Comparação entre os algoritmos mais rápidos (tempo)](docs/randomFast-final.png){width=300px}
 
 Porém, analisando o gráfico do número de trocas (Figura 22), é notável a quantidade feita pelo ShellSort, tornando-o menos favorável dos 3 pelo custo computacional. 
 
-![Comparação entre os algoritmos mais rápidos (trocas)](docs/randomFast-swaps-final.png)
+![Comparação entre os algoritmos mais rápidos (trocas)](docs/randomFast-swaps-final.png){width=300px}
 
 ---
 
@@ -504,18 +507,18 @@ Porém, analisando o gráfico do número de trocas (Figura 22), é notável a qu
 Para entradas crescentes, a diferença é que o BubbleSort Melhorado não está entre os mais lentos. (Figura 23)
 Além disso, o número de trocas é zero para quase todos, exceto para o MergeSort e o HeapSort. (Figura 24)
 
-![Comparação de entradas crescentes](docs/ascendingAll-final.png)
+![Comparação de entradas crescentes](docs/ascendingAll-final.png){width=300px}
 
-![Comparação entre as trocas para entradas crescentes](docs/ascendingAll-swaps-final.png)
+![Comparação entre as trocas para entradas crescentes](docs/ascendingAll-swaps-final.png){width=300px}
 
 ---
 
 Os 3 algoritmos mais rápidos agora são o ShellSort, o BubbleSort Melhorado e o InsertionSort (Figura 25).
 Eles são executados na faixa de 6 milisegundos, aproximadamente, e não realizam nenhuma troca (Figura 26). 
 
-![Comparação entre os algoritmos mais rápidos (tempo)](docs/ascendingFast-final.png)
+![Comparação entre os algoritmos mais rápidos (tempo)](docs/ascendingFast-final.png){width=300px}
 
-![Comparação entre os algoritmos mais rápidos (tempo)](docs/ascendingFast-swaps-final.png)
+![Comparação entre os algoritmos mais rápidos (tempo)](docs/ascendingFast-swaps-final.png){width=300px}
 
 #### 5.3 Entradas decrescentes
 
@@ -524,9 +527,9 @@ Mesmo se alternando, o comportamento destes algoritmos é muito semelhante e iss
 
 Já o número de trocas é na casa dos bilhões para os 3 mais lentos (Figura 28), exceto que o SelectionSort faz menos trocas que o InsertionSort (tendo o mesmo comportamento em tempo).
 
-![Comparação de entradas decrescentes](docs/descendingAll-final.png)
+![Comparação de entradas decrescentes](docs/descendingAll-final.png){width=300px}
 
-![Comparação entre as trocas para entradas crescentes](docs/descendingAll-swaps-final.png)
+![Comparação entre as trocas para entradas crescentes](docs/descendingAll-swaps-final.png){width=300px}
 
 ---
 
@@ -534,9 +537,9 @@ Os 3 algoritmos mais rápidos são de novo o HeapSort, o MergeSort e o ShellSort
 
 Porém, comparado com entradas aleatórias, o que diferencia são os números de trocas (Figura 30): o MergeSort aqui faz mais trocas que o ShellSort.
 
-![Comparação entre as trocas para entradas crescentes](docs/descendingFast-final.png)
+![Comparação entre as trocas para entradas crescentes](docs/descendingFast-final.png){width=300px}
 
-![Comparação entre as trocas para entradas crescentes](docs/descendingFast-swaps-final.png)
+![Comparação entre as trocas para entradas crescentes](docs/descendingFast-swaps-final.png){width=300px}
 
 ### 6. Conclusões
 

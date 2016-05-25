@@ -157,9 +157,9 @@ var Sort = (function () {
             atual = numbers[i];
             for (var j = i - 1; j >= 0 && atual < numbers[j]; j--) {
                 numbers[j + 1] = numbers[j];
+                ++swaps;
             }
             numbers[j + 1] = atual;
-            ++swaps;
         }
         return swaps;
     };
@@ -173,9 +173,9 @@ var Sort = (function () {
                 var x = numbers[i];
                 for (var j = i; (j >= salto) && (x < numbers[j - salto]); j -= salto) {
                     numbers[j] = numbers[j - salto];
+                    ++swaps;
                 }
                 numbers[j] = x;
-                ++swaps;
             }
         }
         return swaps;
@@ -196,7 +196,8 @@ var Sort = (function () {
             }
             numbers[k] = numbers[i];
             numbers[i] = menor;
-            ++swaps;
+            if (k != i)
+                ++swaps;
         }
         return swaps;
     };

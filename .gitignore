@@ -2,3 +2,7 @@ node_modules
 tools
 typings
 .vscode
+
+*.log
+*.tex~
+*.md~
