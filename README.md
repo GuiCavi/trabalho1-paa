@@ -1,7 +1,7 @@
-#Trabalho de Projeto e Análise de Algoritmos
+# Trabalho de Projeto e Análise de Algoritmos
 
-##Comparação dos métodos de ordenação utilizando JavaScript
-###Guilherme Vincenzi Cavichioli
+## Comparação dos métodos de ordenação utilizando JavaScript
+### Guilherme Vincenzi Cavichioli
 
 ### 1. Introdução
 
